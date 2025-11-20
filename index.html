@@ -25,23 +25,17 @@
     header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       gap: 2vw;
-      padding: 2vh 3vw;
+      padding: 2vh 0;
       width: 100%;
       position: relative;
-    }
-
-    .header-main {
-      display: flex;
-      align-items: center;
-      gap: 2vw;
-      flex: 1;
-      justify-content: center;
-      margin-right: auto;
+      flex-wrap: wrap;
     }
 
     .contact-btn {
+      position: absolute;
+      right: 3vw;
       background: #00a2ff;
       border: none;
       color: #fff;
@@ -57,33 +51,28 @@
       text-decoration: none;
       display: inline-block;
       white-space: nowrap;
-      flex-shrink: 0;
     }
 
     @media (max-width: 768px) {
       header {
-        flex-direction: column;
-        gap: 1.5vh;
+        gap: 3vw;
         padding: 1.5vh 2vw;
       }
 
-      .header-main {
-        gap: 3vw;
-        margin-right: 0;
-      }
-
       .contact-btn {
-        padding: 1.2vh 6vw;
-        font-size: 1rem;
+        position: static;
+        margin-top: 1vh;
+        padding: 1vh 4vw;
+        font-size: 0.85rem;
         border-radius: 4px;
       }
 
       header img {
-        height: 7vh;
+        height: clamp(5vh, 8vh, 10vh);
       }
 
       header h1 {
-        font-size: 1.3rem;
+        font-size: clamp(1rem, 5vw, 1.5rem);
       }
     }
 
@@ -386,10 +375,8 @@
 </head>
 <body>
   <header>
-    <div class="header-main">
-      <img src="images/CT_Logo_Transparent_Querformat(1).svg" alt="Contec Logo" />
-      <h1>Set Visualizer</h1>
-    </div>
+    <img src="images/CT_Logo_Transparent_Querformat(1).svg" alt="Contec Logo" />
+    <h1>Set Visualizer</h1>
     <a href="https://www.contec-eventtechnik.de/buchen" 
        class="contact-btn" 
        target="_blank"
