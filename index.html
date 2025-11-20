@@ -25,30 +25,66 @@
     header {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       gap: 2vw;
-      padding: 2vh 0;
+      padding: 2vh 3vw;
       width: 100%;
       position: relative;
     }
 
+    .header-main {
+      display: flex;
+      align-items: center;
+      gap: 2vw;
+      flex: 1;
+      justify-content: center;
+      margin-right: auto;
+    }
+
     .contact-btn {
-      position: absolute;
-      right: 3vw;
       background: #00a2ff;
       border: none;
       color: #fff;
-      padding: 1.2vh 2.5vw;
+      padding: clamp(0.8vh, 1.2vh, 1.5vh) clamp(1.5vw, 2.5vw, 3vw);
       border-radius: 0.6vw;
-      font-size: clamp(1rem, 1.3vw + 0.4vh, 1.8rem);
+      font-size: clamp(0.7rem, 1vw + 0.3vh, 1.8rem);
       font-family: "Barlow Condensed", sans-serif;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       text-decoration: none;
       display: inline-block;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 1.5vh;
+        padding: 1.5vh 2vw;
+      }
+
+      .header-main {
+        gap: 3vw;
+        margin-right: 0;
+      }
+
+      .contact-btn {
+        padding: 1.2vh 6vw;
+        font-size: 1rem;
+        border-radius: 4px;
+      }
+
+      header img {
+        height: 7vh;
+      }
+
+      header h1 {
+        font-size: 1.3rem;
+      }
     }
 
     .contact-btn:hover {
@@ -58,13 +94,13 @@
     }
 
     header img {
-      height: 12vh;
+      height: clamp(6vh, 12vh, 15vh);
       margin-top: -0.5vh;
     }
 
     header h1 {
       font-weight: 700;
-      font-size: clamp(1.5rem, 3vw + 0.5vh, 4rem);
+      font-size: clamp(1.2rem, 3vw + 0.5vh, 4rem);
       color: #00a2ff;
       text-transform: uppercase;
       margin: 0;
@@ -194,7 +230,7 @@
       left: 0; 
       right: 0; 
       bottom: 0;
-      background: url("stage.png") center center / cover no-repeat;
+      background: url('images/stage.png') center center / cover no-repeat;
       z-index: 0;
       filter: brightness(0.7) blur(0px);
       background-size: cover;
@@ -257,7 +293,18 @@
       position: relative;
     }
 
-
+    .controls button {
+      background: #00a2ff;
+      border: none;
+      color: #fff;
+      padding: 1.5vh 3vw;
+      border-radius: 0.6vw;
+      font-size: clamp(1.2rem, 1.8vw + 0.5vh, 2.5rem);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
 
     .controls button:hover {
       background: #0080cc;
@@ -325,21 +372,6 @@
       opacity: 1;
       pointer-events: auto;
     }
-    .controls button {
-      background: #00a2ff;
-      border: none;
-      color: #fff;
-      padding: 1.5vh 3vw;
-      border-radius: 0.6vw;
-      font-size: clamp(1.2rem, 1.8vw + 0.5vh, 2.5rem);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      /* HIER HINZUFÜGEN: */
-      font-family: "Barlow Condensed", sans-serif;
-      font-weight: 600;
-    }
 
     .info-tooltip a {
       color: #00a2ff;
@@ -354,8 +386,10 @@
 </head>
 <body>
   <header>
-<img src="CT_Logo_Transparent_Querformat%20%28SVG%29%281%29.png" alt="CT_Logo_Transparent_Querformat (SVG)(1)">
-    <h1>Set Visualizer</h1>
+    <div class="header-main">
+      <img src="images/CT_Logo_Transparent_Querformat(1).svg" alt="Contec Logo" />
+      <h1>Set Visualizer</h1>
+    </div>
     <a href="https://www.contec-eventtechnik.de/buchen" 
        class="contact-btn" 
        target="_blank"
@@ -385,10 +419,10 @@
 
     <div class="stage-wrapper">
       <div class="stage-area">
-        <img id="img-XS" class="stage-image" src="PXS.png" alt="PXS">
-        <img id="img-S"  class="stage-image" src="PS (2).png" alt="PS (2)">
-        <img id="img-M"  class="stage-image visible" src="PM.png" alt="PM">
-        <img id="img-L"  class="stage-image" src="PL(2).png" alt="PL(2)">
+        <img src="images/PXS.png" id="img-XS" class="stage-image" alt="Set XS">
+        <img src="images/PS (2).png" id="img-S" class="stage-image" alt="Set S">
+        <img src="images/PM.png" id="img-M" class="stage-image visible" alt="Set M">
+        <img src="images/PL(2).png" id="img-L" class="stage-image" alt="Set L">
       </div>
 
       <div class="controls">
@@ -398,11 +432,11 @@
         <button onclick="setStage('L')" data-set="L">L</button>
 
         <!-- Info-Bild als klickbares Bild -->
-<div class="info-btn-wrapper" onmouseenter="showTooltip()" onmouseleave="hideTooltip()">
-                    <img src="image.psd(1).png" alt="Info" class="info-btn" onclick="openPDF()">
+        <div class="info-btn-wrapper" onmouseenter="showTooltip()" onmouseleave="hideTooltip()">
+          <img src="images/image.psd(1).png" alt="Info" class="info-btn" onclick="openPDF()">
           <div class="info-tooltip" id="tooltip">
             Für den vollen Umfang an Informationen schauen sie sich den kompletten 
-                        <a href="Mietkatalog ConTec Eventtechnik.pdf" target="_blank" rel="noopener noreferrer">Mietkatalog</a> an.
+            <a href="images/Mietkatalog ConTec Eventtechnik.pdf" target="_blank" rel="noopener noreferrer">Mietkatalog</a> an.
           </div>
         </div>
       </div>
@@ -455,15 +489,8 @@
     }
 
     function openPDF() {
-      window.open('Mietkatalog ConTec Eventtechnik.pdf', '_blank');
+      window.open('images/Mietkatalog ConTec Eventtechnik.pdf', '_blank');
     }
   </script>
 </body>
-
 </html>
-
-
-
-
-
-
