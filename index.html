@@ -30,12 +30,21 @@
       padding: 2vh 0;
       width: 100%;
       position: relative;
-      flex-wrap: wrap;
+      max-width: 95vw;
+      margin: 0 auto;
+    }
+
+    .header-main {
+      display: flex;
+      align-items: center;
+      gap: 2vw;
+      flex: 1;
+      justify-content: center;
     }
 
     .contact-btn {
       position: absolute;
-      right: 3vw;
+      right: 0;
       background: #00a2ff;
       border: none;
       color: #fff;
@@ -51,29 +60,7 @@
       text-decoration: none;
       display: inline-block;
       white-space: nowrap;
-    }
-
-    @media (max-width: 768px) {
-      header {
-        gap: 3vw;
-        padding: 1.5vh 2vw;
-      }
-
-      .contact-btn {
-        position: static;
-        margin-top: 1vh;
-        padding: 1vh 4vw;
-        font-size: 0.85rem;
-        border-radius: 4px;
-      }
-
-      header img {
-        height: clamp(5vh, 8vh, 10vh);
-      }
-
-      header h1 {
-        font-size: clamp(1rem, 5vw, 1.5rem);
-      }
+      flex-shrink: 0;
     }
 
     .contact-btn:hover {
@@ -93,6 +80,34 @@
       color: #00a2ff;
       text-transform: uppercase;
       margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 1.5vh;
+        padding: 1.5vh 2vw;
+      }
+
+      .header-main {
+        gap: 3vw;
+        margin-right: 0;
+      }
+
+      .contact-btn {
+        position: static;
+        padding: 1.2vh 6vw;
+        font-size: 1rem;
+        border-radius: 4px;
+      }
+
+      header img {
+        height: 7vh;
+      }
+
+      header h1 {
+        font-size: 1.3rem;
+      }
     }
 
     main {
@@ -310,6 +325,7 @@
       right: 2vw;
       top: 50%;
       transform: translateY(-50%);
+      z-index: 1001;
     }
 
     .info-btn {
@@ -320,10 +336,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 4vh;
-      height: 4vh;
-      min-width: 40px;
-      min-height: 40px;
+      width: clamp(35px, 4vh, 50px);
+      height: clamp(35px, 4vh, 50px);
       aspect-ratio: 1 / 1;
       transition: all 0.3s ease;
     }
@@ -346,15 +360,17 @@
       right: -5px;
       background: #000;
       color: #fff;
-      padding: 1vh 1.5vw;
+      padding: clamp(0.8vh, 1vh, 1.2vh) clamp(1vw, 1.5vw, 2vw);
       border-radius: 0.6vw;
-      font-size: clamp(0.9rem, 1vw + 0.3vh, 1.2rem);
-      white-space: nowrap;
+      font-size: clamp(0.75rem, 0.9vw + 0.2vh, 1.1rem);
+      white-space: normal;
+      max-width: 250px;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.3s ease;
-      z-index: 10;
+      z-index: 1000;
       border: 1px solid #00a2ff;
+      line-height: 1.4;
     }
 
     .info-tooltip.show {
@@ -371,12 +387,49 @@
     .info-tooltip a:hover {
       text-decoration: underline;
     }
+
+    @media (max-width: 768px) {
+      .info-btn-wrapper {
+        right: 3vw;
+      }
+
+      .info-btn {
+        width: 40px;
+        height: 40px;
+      }
+
+      .info-tooltip {
+        max-width: 200px;
+        font-size: 0.8rem;
+        padding: 1vh 2vw;
+        right: 0;
+        white-space: normal;
+      }
+
+      .controls {
+        padding: 1.5vh 0;
+      }
+
+      .controls button {
+        font-size: clamp(1rem, 4vw, 1.5rem);
+        padding: 1.2vh 2.5vw;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .info-tooltip {
+        max-width: 180px;
+        font-size: 0.75rem;
+      }
+    }
   </style>
 </head>
 <body>
   <header>
-    <img src="images/CT_Logo_Transparent_Querformat(1).svg" alt="Contec Logo" />
-    <h1>Set Visualizer</h1>
+    <div class="header-main">
+      <img src="images/CT_Logo_Transparent_Querformat(1).svg" alt="Contec Logo" />
+      <h1>Set Visualizer</h1>
+    </div>
     <a href="https://www.contec-eventtechnik.de/buchen" 
        class="contact-btn" 
        target="_blank"
@@ -481,5 +534,3 @@
   </script>
 </body>
 </html>
-
-
