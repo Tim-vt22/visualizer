@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" data-design="a">
+<html lang="de">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -27,7 +27,6 @@
       font-display: swap;
     }
 
-    /* Design A: Klassisch (wie bisher, schwarz + blau) */
     :root {
       --bg: #0a0a0a;
       --panel: #111316;
@@ -43,26 +42,6 @@
       --radius: 10px;
       --radius-lg: 18px;
       --shadow: 0 0 40px rgba(0, 162, 255, 0.25);
-      --stage-dim: brightness(0.62);
-      --stage-tint: rgba(0, 0, 0, 0);
-    }
-
-    /* Design B: Katalog (Petrol + Cyan, runde Karten wie im Mietkatalog) */
-    :root[data-design="b"] {
-      --bg: #0a201e;
-      --panel: #10302d;
-      --card: #163c38;
-      --card-hover: #1b4742;
-      --line: rgba(0, 173, 253, 0.28);
-      --accent: #00adfd;
-      --accent-dark: #0090d4;
-      --accent-soft: rgba(0, 173, 253, 0.16);
-      --muted: #b3cbc8;
-      --radius: 16px;
-      --radius-lg: 26px;
-      --shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 20px 60px rgba(0, 0, 0, 0.45);
-      --stage-dim: brightness(0.55) saturate(0.9);
-      --stage-tint: rgba(10, 45, 42, 0.35);
     }
 
     * { box-sizing: border-box; }
@@ -77,10 +56,6 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-    }
-
-    :root[data-design="b"] body {
-      background: radial-gradient(ellipse at top, #12403b 0%, var(--bg) 60%);
     }
 
     button { font-family: inherit; letter-spacing: inherit; }
@@ -220,8 +195,6 @@
       line-height: 1.05;
     }
 
-    :root[data-design="b"] .bracket::before { content: "["; }
-    :root[data-design="b"] .bracket::after { content: "]"; }
 
     .subtitle {
       font-size: 1.25rem;
@@ -474,31 +447,19 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: url("images/stage.png") center calc(50% - 2vh) / cover no-repeat;
-      filter: var(--stage-dim);
+      /* --bg-y setzt das Skript so, dass die blaue Bodenlinie immer gut sichtbar ist */
+      background: url("images/stage.png") center var(--bg-y, 50%) / cover no-repeat;
+      filter: brightness(0.62);
       z-index: 0;
-    }
-
-    .stage::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: var(--stage-tint);
-      z-index: 0;
-      pointer-events: none;
     }
 
     .layer { position: absolute; inset: 0; z-index: 1; transition: opacity 0.4s ease; }
     .layer[hidden] { display: block; opacity: 0; pointer-events: none; }
 
+    /* Position und Größe setzt das Skript: alles steht auf der blauen Linie */
     .kp-image {
       position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 94%;
-      height: 90%;
-      object-fit: contain;
-      transform: translate(-50%, -50%);
+      height: 0;
       opacity: 0;
       filter: blur(6px);
       transition: opacity 0.6s ease, filter 0.6s ease;
@@ -509,7 +470,6 @@
 
     .piece {
       position: absolute;
-      bottom: 5%;
       height: 0;
       opacity: 0;
       transition: left 0.5s ease, height 0.5s ease, opacity 0.35s ease;
@@ -626,14 +586,9 @@
       flex-shrink: 0;
     }
 
-    .kp-buttons button b { display: block; font-size: clamp(1.3rem, 1vw + 0.8rem, 1.9rem); }
-    .kp-buttons button small { display: block; font-size: 0.85rem; opacity: 0.85; }
+    .kp-buttons button b { display: block; font-size: clamp(1.4rem, 1vw + 0.9rem, 2rem); padding: 2px 0; }
     .kp-buttons button:hover { background: var(--accent-dark); transform: translateY(-2px); }
     .kp-buttons button[aria-pressed="true"] { background: #fff; color: #000; }
-
-    :root[data-design="b"] .kp-buttons button { background: var(--card); box-shadow: inset 0 0 0 1.5px var(--line); }
-    :root[data-design="b"] .kp-buttons button:hover { background: var(--card-hover); }
-    :root[data-design="b"] .kp-buttons button[aria-pressed="true"] { background: var(--accent); color: #fff; box-shadow: none; }
 
     .builder-help { color: var(--muted); font-size: 1.1rem; text-align: center; }
     .mobile-only { display: none; }
@@ -670,29 +625,7 @@
     footer a { color: var(--accent); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
 
-    /* Nur für die Vorschau: Design A/B umschalten */
-    .design-switch {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255, 181, 71, 0.12);
-      border: 1px dashed rgba(255, 181, 71, 0.6);
-      border-radius: 999px;
-      padding: 3px 4px 3px 12px;
-      color: #ffe2b3;
-    }
-
-    .design-switch button {
-      background: transparent;
-      border: none;
-      color: #ffe2b3;
-      padding: 3px 10px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 0.95rem;
-    }
-
-    .design-switch button[aria-pressed="true"] { background: var(--warn); color: #000; }
+    .btn-block { width: 100%; margin-top: 6px; }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition: none !important; }
@@ -749,7 +682,6 @@
       .brand img { height: 38px; }
       .mode-switch button { padding: 7px 14px; font-size: 1rem; }
       .kp-buttons { gap: 5px; }
-      .kp-buttons button small { font-size: 0.75rem; }
     }
   </style>
 </head>
@@ -771,15 +703,19 @@
     <section class="panel" aria-live="polite">
       <!-- Komplettpakete -->
       <div class="panel-scroll" id="panel-pakete">
-        <h2 class="bracket" id="kp-name">Komplettpaket 1</h2>
+        <h2 id="kp-name">Komplettpaket 1</h2>
         <p class="subtitle" id="kp-subtitle"></p>
         <ul class="features" id="kp-features"></ul>
         <div id="kp-hints"></div>
+        <button class="btn btn-ghost btn-block" id="btn-anpassen" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
+          Dieses Paket anpassen
+        </button>
       </div>
 
       <!-- Eigenes Paket -->
       <div class="panel-scroll" id="panel-eigenes" hidden>
-        <h2 class="bracket">Eigenes Paket</h2>
+        <h2>Eigenes Paket</h2>
         <p class="lead">Stell dir dein Paket selbst zusammen: Wähle ein Sound- und ein Lichtsystem und ergänze Mikrofone oder Extras. Die Bühne zeigt dir live, wie es aussieht.</p>
 
         <div class="step">
@@ -825,7 +761,6 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
             E-Mail
           </a>
-          <button class="btn btn-ghost" id="btn-anpassen" type="button">Paket anpassen</button>
         </div>
       </div>
     </section>
@@ -853,10 +788,6 @@
 
   <footer>
     <span>ConTec Eventtechnik · <a href="mailto:info@contec-eventtechnik.com">info@contec-eventtechnik.com</a> · <a href="https://wa.me/4917651968537" target="_blank" rel="noopener noreferrer">+49 176 51968537</a></span>
-    <span class="design-switch" id="design-switch" title="Nur in der Testversion sichtbar">Vorschau-Design:
-      <button type="button" data-design="a" aria-pressed="true">A Klassisch</button>
-      <button type="button" data-design="b" aria-pressed="false">B Katalog</button>
-    </span>
   </footer>
 
   <script>
@@ -1025,6 +956,49 @@
       return `<p class="hint${warn ? " warn" : ""}">${warn ? ICON_WARN : ICON_INFO}<span>${text}</span></p>`;
     }
 
+    /* ---------- Bühne: alles steht auf der blauen Linie ---------- */
+
+    // Bühnenbild stage.png: 1536 x 1024 px, blaue Bodenlinie in Pixelzeile 946
+    const BUEHNE = { w: 1536, h: 1024, linie: 946 / 1024 };
+
+    // Seitenverhältnis und relative Höhe der Komplettpaket-Bilder (wie bei den Systemen)
+    const KP_BILD = [
+      { ar: 939 / 1000, h: 1 }, { ar: 892 / 1000, h: 1.04 }, { ar: 752 / 1000, h: 1.03 }, { ar: 1390 / 1000, h: 1.02 },
+      { ar: 1612 / 958, h: 1 }, { ar: 1538 / 893, h: 1 }, { ar: 1683 / 784, h: 1.03 }
+    ];
+
+    function buehne() {
+      const stage = $("stage");
+      const W = stage.clientWidth, H = stage.clientHeight;
+      const bildH = BUEHNE.h * Math.max(W / BUEHNE.w, H / BUEHNE.h);
+      // Linie möglichst bei 90 % der Höhe; das Bild muss die Fläche aber ganz ausfüllen
+      const y = Math.min(0, Math.max(H - bildH, 0.9 * H - BUEHNE.linie * bildH));
+      stage.style.setProperty("--bg-y", y + "px");
+      const boden = y + BUEHNE.linie * bildH;
+      // Ein Maßstab für alle Ansichten: die breiteste Zusammenstellung (Paket 7 bzw.
+      // Soundsystem 4 + Lichtsystem 9) ist rund 2,3 Höheneinheiten breit und muss passen.
+      // So bleibt beim Umschalten jedes Gerät gleich groß.
+      return { W, H, unten: H - boden, base: Math.min(H * 0.8, boden * 0.88, (W * 0.94) / 2.3) };
+    }
+
+    function layoutPakete() {
+      const { W, H, unten, base } = buehne();
+      if (!W || !H) return;
+      document.querySelectorAll(".kp-image").forEach((img, i) => {
+        const b = KP_BILD[i];
+        let h = base * b.h;
+        if (h * b.ar > W * 0.94) h = (W * 0.94) / b.ar;
+        img.style.height = h + "px";
+        img.style.left = (W - h * b.ar) / 2 + "px";
+        img.style.bottom = unten + "px";
+      });
+    }
+
+    function layout() {
+      if (state.mode === "eigenes") layoutStage();
+      else layoutPakete();
+    }
+
     /* ---------- Komplettpakete ---------- */
 
     function buildPaketeLayer() {
@@ -1033,8 +1007,7 @@
       KOMPLETT.forEach((kp, i) => {
         const img = el("img", { class: "kp-image", alt: `Komplettpaket ${i + 1}`, "data-src": `images/pakete/komplettpaket-${i + 1}.png` });
         layer.appendChild(img);
-        const b = el("button", { type: "button", "aria-pressed": "false", "aria-label": `Komplettpaket ${i + 1}, ${kp.preis} Euro` },
-          `<b>${i + 1}</b><small>${euro(kp.preis)}</small>`);
+        const b = el("button", { type: "button", "aria-pressed": "false", "aria-label": `Komplettpaket ${i + 1}` }, `<b>${i + 1}</b>`);
         b.addEventListener("click", () => showPaket(i));
         buttons.appendChild(b);
       });
@@ -1047,6 +1020,7 @@
     function showPaket(i) {
       state.paket = i;
       const kp = KOMPLETT[i];
+      layoutPakete();
       const imgs = document.querySelectorAll(".kp-image");
       imgs.forEach((img, j) => {
         if (j === i) {
@@ -1222,8 +1196,7 @@
     }
 
     function layoutStage() {
-      const stage = $("stage");
-      const W = stage.clientWidth, H = stage.clientHeight;
+      const { W, H, unten, base: maxBase } = buehne();
       if (!W || !H) return;
 
       const s = state.sound ? SOUND[state.sound] : null;
@@ -1236,7 +1209,7 @@
       if (state.tubes) row.push({ ...TUBES.bild, slot: "tubes", alt: "LED-Tubes" });
       if (s && s.rechts) row.push({ ...s.rechts, slot: "soundR", src: "images/systeme/" + s.rechts.src, alt: s.name });
 
-      let base = H * 0.8;
+      let base = maxBase;
       const gap = () => base * 0.07;
       const total = () => row.reduce((sum, p) => sum + base * p.h * p.ar, 0) + gap() * Math.max(0, row.length - 1);
       const maxW = W * 0.94;
@@ -1249,6 +1222,7 @@
         const h = base * p.h;
         img.style.height = h + "px";
         img.style.left = x + "px";
+        img.style.bottom = unten + "px";
         setPiece(img, p.src, p.alt);
         used.add(p.slot);
         x += h * p.ar + gap();
@@ -1263,6 +1237,7 @@
       for (let i = 0; i < 6; i++) {
         const sp = piece("spot" + i, "spot");
         sp.style.width = spotW + "px";
+        sp.style.bottom = Math.max(4, unten - spotW * 0.35) + "px";
         if (i < n) {
           sp.style.left = (W * (i + 0.5) / n - spotW / 2) + "px";
           setPiece(sp, AMBIENTE.bild, "LED-Strahler");
@@ -1336,7 +1311,6 @@
         a.style.opacity = leer ? "0.4" : "";
         a.setAttribute("aria-disabled", leer ? "true" : "false");
       });
-      $("btn-anpassen").hidden = state.mode !== "pakete";
     }
 
     /* ---------- Ansicht wechseln ---------- */
@@ -1374,25 +1348,12 @@
       $("panel-eigenes").scrollTop = 0;
     });
 
-    /* ---------- Design A/B (nur Testversion) ---------- */
-
-    function setDesign(d) {
-      document.documentElement.dataset.design = d;
-      document.querySelectorAll("#design-switch button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.design === d ? "true" : "false"));
-      try { localStorage.setItem("contec-design", d); } catch (e) {}
-    }
-
-    document.querySelectorAll("#design-switch button").forEach((b) => b.addEventListener("click", () => setDesign(b.dataset.design)));
-
     const params = new URLSearchParams(location.search);
-    let startDesign = params.get("design");
-    if (!startDesign) { try { startDesign = localStorage.getItem("contec-design"); } catch (e) {} }
-    setDesign(startDesign === "b" ? "b" : "a");
 
     buildPaketeLayer();
     buildBuilder();
-    window.addEventListener("resize", () => state.mode === "eigenes" && layoutStage());
-    if ("ResizeObserver" in window) new ResizeObserver(() => state.mode === "eigenes" && layoutStage()).observe($("stage"));
+    window.addEventListener("resize", layout);
+    if ("ResizeObserver" in window) new ResizeObserver(layout).observe($("stage"));
 
     // Startansicht, z. B. ?ansicht=eigenes&sound=ss3&licht=ls6 (praktisch für Screenshots)
     const p = Number(params.get("paket"));
