@@ -1,0 +1,13 @@
+{
+  // Nur für die passwortgeschützte Vorschau bei Cloudflare (Branch test-pakete).
+  // Die echte Seite läuft über GitHub Pages und nutzt diese Datei nicht.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "contec-konfigurator-vorschau",
+  "main": "vorschau.js",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  }
+}
