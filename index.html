@@ -338,6 +338,9 @@
     .option .o-kurz { grid-column: 1 / -1; color: var(--muted); font-size: 0.98rem; }
 
     .option .o-betreuung { color: var(--muted); font-size: 0.85rem; font-weight: 400; margin-left: 6px; }
+    .option .o-regel { grid-column: 1 / -1; color: var(--accent); font-size: 0.92rem; }
+    .option:disabled { opacity: 0.45; cursor: not-allowed; }
+    .option:disabled:hover { background: var(--card); }
 
     .option-detail {
       grid-column: 1 / -1;
@@ -478,6 +481,7 @@
     }
 
     .piece.visible { opacity: 1; }
+    .piece.led-bar { z-index: 3; transition: left 0.5s ease, top 0.5s ease, height 0.5s ease, transform 0.5s ease, opacity 0.35s ease; }
 
     /* Ambiente-Strahler: stehen hinten auf der Bühne und leuchten die Wand an */
     .spot {
@@ -826,13 +830,14 @@
       ss3: { name: "Soundsystem 3", kurz: "2 Hauptlautsprecher + 1 Subwoofer", preis: 140,
         punkte: ["2x RCF Art 910A / 912A – professioneller Aktivlautsprecher mit neuster Technik, 130 dB Schalldruck", "1x RCF Sub 8003 MK3 – professioneller aktiver 18-Zoll-Subwoofer, 2200 W Leistung, 135 dB Schalldruck"],
         text: "Zwei Hauptlautsprecher für breitere Schallabdeckung – geeignet bei größeren Räumen oder höheren Lautstärkeanforderungen.",
-        links: { src: "soundsystem-3-links.png", ar: 259 / 900, h: 1 },
-        rechts: { src: "soundsystem-3-rechts.png", ar: 377 / 900, h: 1 } },
+        // stange = Lage der Lautsprecherstange im Bild (Anteil der Bildbreite), für die LED-Bars von Lichtsystem 7
+        links: { src: "soundsystem-3-links.png", ar: 259 / 900, h: 1, stange: 0.51 },
+        rechts: { src: "soundsystem-3-rechts.png", ar: 377 / 900, h: 1, stange: 0.377 } },
       ss4: { name: "Soundsystem 4", kurz: "2 Hauptlautsprecher + 2 Subwoofer", preis: 180, betreuung: true,
         punkte: ["2x RCF Art 910A / 912A – professioneller Aktivlautsprecher mit neuster Technik, 130 dB Schalldruck", "2x RCF Sub 8003 MK3 – professioneller aktiver 18-Zoll-Subwoofer, 2200 W Leistung, 135 dB Schalldruck"],
         text: "Doppelte Subwoofer-Power für maximalen Bass und Reichweite – unser stärkstes Soundsystem.",
-        links: { src: "soundsystem-4-links.png", ar: 264 / 900, h: 1 },
-        rechts: { src: "soundsystem-4-rechts.png", ar: 264 / 900, h: 1 } }
+        links: { src: "soundsystem-4-links.png", ar: 264 / 900, h: 1, stange: 0.51 },
+        rechts: { src: "soundsystem-4-rechts.png", ar: 264 / 900, h: 1, stange: 0.51 } }
     };
 
     const LICHT = {
@@ -872,6 +877,14 @@
         punkte: ["2x große Hybrid Movingheads (Eurolite TMH H90)", "LED-Hexagon, bestehend aus 6 LED-Tubes"],
         text: "Zwei große Movingheads auf Stativen mit LED-Hexagon.",
         bild: { src: "lichtsystem-7.png", ar: 835 / 900, h: 1.0 } },
+      // Aus Komplettpaket 6: die LED-Bars hängen an den Lautsprecherstativen, deshalb nur mit
+      // Soundsystem 3 oder 4. Preis = Komplettpaket 6 (380 €) minus Soundsystem 4 (180 €).
+      ls7b: { name: "Lichtsystem 7 mit 2 LED-Bars", kurz: "Lichtsystem 7 + 2 LED-Bars an den Lautsprecherstativen", preis: 200, betreuung: true,
+        nurMit: ["ss3", "ss4"], ersatz: "ls7",
+        regel: "Nur mit Soundsystem 3 oder 4 möglich",
+        punkte: ["2x Lichtstative", "2x große Hybrid Movingheads (Eurolite TMH H90)", "2x LED-Bars", "1x LED-Hexagon, bestehend aus 6 LED-Tubes"],
+        text: "Dieser Lichtaufbau nutzt die Lautsprecherstative als Halterung und ist ausschließlich in Kombination mit Soundsystem 3 oder 4 verfügbar.",
+        bild: { src: "lichtsystem-7.png", ar: 835 / 900, h: 1.0, stangen: [0.108, 0.892] }, ledBars: true },
       ls8: { name: "Lichtsystem 8", kurz: "2 beleuchtete Traversentower", preis: 220, betreuung: true,
         punkte: ["4x große Hybrid Movingheads (Eurolite TMH H90)", "2x LED-Bar", "2x Strobe/LED-Mehrzweckscheinwerfer"],
         text: "Vier große Movingheads auf zwei Traversentowern – kraftvolle Lichteffekte für größere Flächen.",
@@ -928,7 +941,7 @@
           { titel: "Soundsystem 3", kurz: "2 Hauptlautsprecher und 1 Subwoofer", punkte: ["2x RCF Art 910A / 912A; professioneller Lautsprecher mit bis zu 130 dB", "1x RCF Sub 8003 MK3, professioneller aktiver 18-Zoll-Subwoofer mit 135 dB"] },
           { titel: "Lichtsystem 6", punkte: ["2x beleuchtete Traversentower", "2x große Hybrid Movingheads (Eurolite TMH H90)", "2x Strobe/LED-Mehrzweckscheinwerfer", "2x LED-Bars"] }
         ] },
-      { sound: "ss4", licht: "ls7", lichtName: "Lichtsystem 7 mit 2 LED-Bars", preis: 380, betreuung: true,
+      { sound: "ss4", licht: "ls7b", preis: 380, betreuung: true,
         liste: [
           { titel: "Soundsystem 4", kurz: "2 Hauptlautsprecher und 2 Subwoofer", punkte: ["2x RCF Art 910A / 912A; professioneller Lautsprecher mit bis zu 130 dB", "2x RCF Sub 8003 MK3, professioneller aktiver 18-Zoll-Subwoofer mit 135 dB"] },
           { titel: "Lichtsystem 7 mit 2 LED-Bars", punkte: ["2x Lichtstative", "2x große Hybrid Movingheads (Eurolite TMH H90)", "2x LED-Bars", "1x LED-Hexagon, bestehend aus 6 LED-Tubes"] }
@@ -949,7 +962,8 @@
       slxd: 0,
       beta: 0,
       tubes: false,
-      ambiente: 0
+      ambiente: 0,
+      hinweis: ""
     };
 
     const $ = (id) => document.getElementById(id);
@@ -1055,7 +1069,7 @@
       document.querySelectorAll("#kp-buttons button").forEach((b, j) => b.setAttribute("aria-pressed", j === i ? "true" : "false"));
 
       $("kp-name").textContent = `Komplettpaket ${i + 1}`;
-      $("kp-subtitle").textContent = `${SOUND[kp.sound].name} + ${kp.lichtName || LICHT[kp.licht].name}`;
+      $("kp-subtitle").textContent = `${SOUND[kp.sound].name} + ${LICHT[kp.licht].name}`;
       $("kp-features").innerHTML = kp.liste.map((g) =>
         `<li><strong>${g.titel}</strong>${g.kurz ? `<span class="kurz">${g.kurz}</span>` : ""}<ul>${g.punkte.map((p) => `<li>${p}</li>`).join("")}</ul></li>`
       ).join("");
@@ -1073,19 +1087,34 @@
         `<span class="o-name">${item.name}${item.betreuung ? '<span class="o-betreuung" title="Nur mit technischer Betreuung buchbar">· mit Betreuung</span>' : ""}</span>` +
         `<span class="o-price">${item.preis !== undefined ? euro(item.preis) : ""}</span>` +
         `<span class="o-kurz">${item.kurz}</span>` +
+        (item.regel ? `<span class="o-regel">${item.regel}</span>` : "") +
         (item.punkte ? `<span class="option-detail"><ul>${item.punkte.map((p) => `<li>${p}</li>`).join("")}</ul>${item.text ? `<p>${item.text}</p>` : ""}${item.betreuung ? note(BETREUUNG) : ""}</span>` : "");
-      b.addEventListener("click", () => {
-        state[group] = state[group] === key ? null : key;
-        render();
-      });
+      b.addEventListener("click", () => waehle(group, state[group] === key ? null : key));
       return b;
     }
 
     function noneButton(group, label) {
       const b = el("button", { type: "button", class: "option", "aria-pressed": "false", "data-key": "" },
         `<span class="o-name">${label}</span><span class="o-price"></span>`);
-      b.addEventListener("click", () => { state[group] = null; render(); });
+      b.addEventListener("click", () => waehle(group, null));
       return b;
+    }
+
+    // Sound oder Licht wählen und danach die Kombinationsregeln prüfen
+    function waehle(group, key) {
+      state[group] = key;
+      state.hinweis = "";
+      pruefeRegeln();
+      render();
+    }
+
+    // Lichtsystem 7 mit 2 LED-Bars braucht die Stative von Soundsystem 3 oder 4
+    function pruefeRegeln() {
+      const l = state.licht && LICHT[state.licht];
+      if (l && l.nurMit && !l.nurMit.includes(state.sound)) {
+        state.licht = l.ersatz;
+        state.hinweis = `Die 2 LED-Bars werden an den Lautsprecherstativen von Soundsystem 3 oder 4 befestigt. Deine Auswahl ist deshalb jetzt ${LICHT[l.ersatz].name} ohne LED-Bars.`;
+      }
     }
 
     function counterRow(key, item) {
@@ -1156,12 +1185,16 @@
     function matchingPaket() {
       const extras = state.slxd || state.beta || state.tubes || state.ambiente;
       if (extras) return -1;
-      return KOMPLETT.findIndex((kp) => kp.sound === state.sound && kp.licht === state.licht && !kp.lichtName);
+      return KOMPLETT.findIndex((kp) => kp.sound === state.sound && kp.licht === state.licht);
     }
 
     function renderBuilderPanel() {
       document.querySelectorAll("#opt-sound .option").forEach((b) => b.setAttribute("aria-pressed", (b.dataset.key || null) === state.sound ? "true" : "false"));
-      document.querySelectorAll("#opt-licht .option").forEach((b) => b.setAttribute("aria-pressed", (b.dataset.key || null) === state.licht ? "true" : "false"));
+      document.querySelectorAll("#opt-licht .option").forEach((b) => {
+        b.setAttribute("aria-pressed", (b.dataset.key || null) === state.licht ? "true" : "false");
+        const l = LICHT[b.dataset.key];
+        b.disabled = !!(l && l.nurMit && !l.nurMit.includes(state.sound));
+      });
 
       for (const k of Object.keys(MIKRO)) {
         const row = document.querySelector(`.counter-row[data-key="${k}"]`);
@@ -1229,7 +1262,7 @@
 
       // Entspricht Sound + Licht einem Komplettpaket, zeigen wir genau dessen Bild an
       // derselben Stelle. So springt beim "Paket anpassen" nichts.
-      const kp = state.tubes ? -1 : KOMPLETT.findIndex((k) => k.sound === state.sound && k.licht === state.licht && !k.lichtName);
+      const kp = state.tubes ? -1 : KOMPLETT.findIndex((k) => k.sound === state.sound && k.licht === state.licht);
       const paketBild = piece("paket");
       if (kp >= 0) {
         platziere(paketBild, kpPlatz(kp, g));
@@ -1239,12 +1272,15 @@
       }
 
       // Sonst Reihenfolge von links nach rechts: Lautsprecher, Licht, Tubes, Lautsprecher
+      // (bei Lichtsystem 7 mit LED-Bars stehen die Tubes ganz rechts, damit die Bars frei hängen)
       const row = [];
+      const bars = kp < 0 && l && l.ledBars && s && s.rechts;
       if (kp < 0) {
         if (s) row.push({ ...s.links, slot: "soundL", src: "images/systeme/" + s.links.src, alt: s.name });
         if (l) row.push({ ...l.bild, slot: "licht", src: "images/systeme/" + l.bild.src, alt: l.name });
-        if (state.tubes) row.push({ ...TUBES.bild, slot: "tubes", alt: "LED-Tubes" });
+        if (state.tubes && !bars) row.push({ ...TUBES.bild, slot: "tubes", alt: "LED-Tubes" });
         if (s && s.rechts) row.push({ ...s.rechts, slot: "soundR", src: "images/systeme/" + s.rechts.src, alt: s.name });
+        if (state.tubes && bars) row.push({ ...TUBES.bild, slot: "tubes", alt: "LED-Tubes" });
       }
 
       let base = maxBase;
@@ -1261,11 +1297,30 @@
         platziere(img, { height: h + "px", left: x + "px", bottom: unten + "px" });
         setPiece(img, p.src, p.alt);
         used.add(p.slot);
+        p.x = x; p.hoehe = h;
         x += h * p.ar + gap();
       }
       for (const slot of ["soundL", "licht", "tubes", "soundR"]) {
         if (!used.has(slot) && pieces[slot]) setPiece(pieces[slot], null);
       }
+
+      // LED-Bars schräg von der Lautsprecherstange (halbe Höhe) zum Hexagon-Stativ
+      // (70 % der Höhe), wie im Katalogbild von Komplettpaket 6
+      const teil = (slot) => row.find((p) => p.slot === slot);
+      [["barL", "soundL", 0], ["barR", "soundR", 1]].forEach(([slot, seite, i]) => {
+        const img = piece(slot, "piece led-bar");
+        if (!bars) { setPiece(img, null); return; }
+        const sp = teil(seite), li = teil("licht");
+        const ax = sp.x + sp.hoehe * sp.ar * sp.stange, ay = H - unten - sp.hoehe * 0.5;
+        const bx = li.x + li.hoehe * li.ar * li.stangen[i], by = H - unten - li.hoehe * 0.7;
+        const laenge = Math.hypot(bx - ax, by - ay);
+        const winkel = Math.atan2(bx - ax, -(by - ay)) * 180 / Math.PI;
+        platziere(img, {
+          height: laenge + "px", left: (ax + bx) / 2 + "px", top: (ay + by) / 2 + "px", bottom: "auto",
+          transform: `translate(-50%, -50%) rotate(${winkel}deg)`
+        });
+        setPiece(img, "images/extras/led-bar.png", "LED-Bar");
+      });
 
       // Ambiente: Strahler stehen hinten auf der Bühne (hinter der Technik)
       // und werfen einen farbigen Lichtschein an die Wand
@@ -1318,7 +1373,7 @@
           titel: `Komplettpaket ${state.paket + 1}`,
           posten: [
             `${SOUND[kp.sound].name} (${SOUND[kp.sound].kurz})`,
-            `${kp.lichtName || LICHT[kp.licht].name} (${LICHT[kp.licht].kurz})`
+            `${LICHT[kp.licht].name} (${LICHT[kp.licht].kurz})`
           ],
           summe: kp.preis,
           betreuung: !!kp.betreuung
@@ -1371,10 +1426,7 @@
         "MEINE VERANSTALTUNG",
         ...FELDER.map((f) => `${f}: `),
         "",
-        "Viele Grüße",
-        "",
-        "Name: ",
-        "Telefon: "
+        "Viele Grüße"
       ].join("\n");
     }
 
@@ -1389,8 +1441,9 @@
           ? `<ul class="summary-list">${sel.map((s) => `<li><span>${s.name}</span><span>${euro(s.preis)}</span></li>`).join("")}</ul>`
           : `<p class="summary-empty">Noch nichts ausgewählt.</p>`;
         if (needsBetreuung()) summary += note(BETREUUNG);
-        if (state.sound === "ss4" && state.licht === "ls7" && !(state.slxd || state.beta || state.tubes || state.ambiente)) {
-          summary += hint("Tipp: Als Komplettpaket 6 bekommst du zusätzlich 2 LED-Bars an den Lautsprecherstativen für 380 €.");
+        if (state.hinweis) summary += hint(state.hinweis);
+        else if (state.licht === "ls7" && LICHT.ls7b.nurMit.includes(state.sound)) {
+          summary += hint("Tipp: Mit deinem Soundsystem geht auch Lichtsystem 7 mit 2 LED-Bars an den Lautsprecherstativen.");
         }
       }
       $("foot-summary").innerHTML = summary;
@@ -1439,7 +1492,7 @@
 
     $("btn-anpassen").addEventListener("click", () => {
       const kp = KOMPLETT[state.paket];
-      Object.assign(state, { sound: kp.sound, licht: kp.licht, slxd: 0, beta: 0, tubes: false, ambiente: 0 });
+      Object.assign(state, { sound: kp.sound, licht: kp.licht, slxd: 0, beta: 0, tubes: false, ambiente: 0, hinweis: "" });
       setMode("eigenes");
       $("panel-eigenes").scrollTop = 0;
     });
@@ -1458,6 +1511,7 @@
     if (LICHT[params.get("licht")]) state.licht = params.get("licht");
     for (const k of ["slxd", "beta", "ambiente"]) if (params.get(k)) state[k] = Number(params.get(k)) || 0;
     if (params.get("tubes") === "1") state.tubes = true;
+    pruefeRegeln();
     setMode(params.get("ansicht") === "eigenes" ? "eigenes" : "pakete");
   </script>
 </body>
