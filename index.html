@@ -338,9 +338,6 @@
     .option .o-kurz { grid-column: 1 / -1; color: var(--muted); font-size: 0.98rem; }
 
     .option .o-betreuung { color: var(--muted); font-size: 0.85rem; font-weight: 400; margin-left: 6px; }
-    .option .o-regel { grid-column: 1 / -1; color: var(--accent); font-size: 0.92rem; }
-    .option:disabled { opacity: 0.45; cursor: not-allowed; }
-    .option:disabled:hover { background: var(--card); }
 
     .option-detail {
       grid-column: 1 / -1;
@@ -481,7 +478,6 @@
     }
 
     .piece.visible { opacity: 1; }
-    .piece.led-bar { z-index: 3; transition: left 0.5s ease, top 0.5s ease, height 0.5s ease, transform 0.5s ease, opacity 0.35s ease; }
 
     /* Ambiente-Strahler: stehen hinten auf der Bühne und leuchten die Wand an */
     .spot {
@@ -759,7 +755,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
           <span>Unsicher, welches System zu deiner Veranstaltung passt? Schick uns gerne Fotos oder Maße deiner Location, dann beraten wir dich individuell.</span>
         </p>
-        <p class="fineprint mobile-only">Alle Preise sind reine Mietpreise pro Einsatztag und unverbindlich. Lieferung, Auf- und Abbau sowie technische Betreuung werden gesondert berechnet.</p>
+        <p class="fineprint mobile-only">Die Preise gelten pro Einsatztag und stellen lediglich den reinen Mietpreis des Equipments dar. Lieferung, Auf- und Abbau sowie technische Betreuung werden gesondert kalkuliert. Alle Preisangaben sind unverbindlich.</p>
       </div>
 
       <div class="panel-foot">
@@ -768,7 +764,7 @@
           <span class="price-label">Mietpreis</span>
           <span class="price" id="price">100 € <small>/ Tag</small></span>
         </div>
-        <p class="fineprint">Reiner Mietpreis pro Einsatztag, unverbindlich. Lieferung, Auf- und Abbau sowie technische Betreuung werden gesondert berechnet.</p>
+        <p class="fineprint">Reiner Mietpreis des Equipments pro Einsatztag, unverbindlich. Lieferung, Auf- und Abbau sowie technische Betreuung werden gesondert kalkuliert.</p>
         <div class="actions">
           <a class="btn btn-whatsapp" id="btn-whatsapp" href="#" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3 1 2.6 1.1 2.8.1.2 1.9 2.9 4.6 4 1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.4-.2z"/></svg>
@@ -810,7 +806,8 @@
   <script>
     const WHATSAPP = "4917651968537";
     const MAIL = "info@contec-eventtechnik.com";
-    const BETREUUNG = "Wird mit technischer Betreuung durch unser Team gebucht (gesondert berechnet).";
+    // Wortlaut aus dem Mietkatalog
+    const BETREUUNG = "Technische Betreuung erforderlich";
 
     // Daten aus dem Mietkatalog 11.26 (gültig November 2026 bis März 2027)
     // h = relative Höhe auf der Bühne, ar = Seitenverhältnis (Breite / Höhe) des Bildes
@@ -830,14 +827,13 @@
       ss3: { name: "Soundsystem 3", kurz: "2 Hauptlautsprecher + 1 Subwoofer", preis: 140,
         punkte: ["2x RCF Art 910A / 912A – professioneller Aktivlautsprecher mit neuster Technik, 130 dB Schalldruck", "1x RCF Sub 8003 MK3 – professioneller aktiver 18-Zoll-Subwoofer, 2200 W Leistung, 135 dB Schalldruck"],
         text: "Zwei Hauptlautsprecher für breitere Schallabdeckung – geeignet bei größeren Räumen oder höheren Lautstärkeanforderungen.",
-        // stange = Lage der Lautsprecherstange im Bild (Anteil der Bildbreite), für die LED-Bars von Lichtsystem 7
-        links: { src: "soundsystem-3-links.png", ar: 259 / 900, h: 1, stange: 0.51 },
-        rechts: { src: "soundsystem-3-rechts.png", ar: 377 / 900, h: 1, stange: 0.377 } },
+        links: { src: "soundsystem-3-links.png", ar: 259 / 900, h: 1 },
+        rechts: { src: "soundsystem-3-rechts.png", ar: 377 / 900, h: 1 } },
       ss4: { name: "Soundsystem 4", kurz: "2 Hauptlautsprecher + 2 Subwoofer", preis: 180, betreuung: true,
         punkte: ["2x RCF Art 910A / 912A – professioneller Aktivlautsprecher mit neuster Technik, 130 dB Schalldruck", "2x RCF Sub 8003 MK3 – professioneller aktiver 18-Zoll-Subwoofer, 2200 W Leistung, 135 dB Schalldruck"],
         text: "Doppelte Subwoofer-Power für maximalen Bass und Reichweite – unser stärkstes Soundsystem.",
-        links: { src: "soundsystem-4-links.png", ar: 264 / 900, h: 1, stange: 0.51 },
-        rechts: { src: "soundsystem-4-rechts.png", ar: 264 / 900, h: 1, stange: 0.51 } }
+        links: { src: "soundsystem-4-links.png", ar: 264 / 900, h: 1 },
+        rechts: { src: "soundsystem-4-rechts.png", ar: 264 / 900, h: 1 } }
     };
 
     const LICHT = {
@@ -873,23 +869,15 @@
         punkte: ["2x große Hybrid Movingheads (Eurolite TMH H90)", "2x LED-Bar", "2x Strobe/LED-Mehrzweckscheinwerfer"],
         text: "Zwei Traversentower für symmetrische Lichtwirkung und mehr Raumabdeckung, mit höherer Lichtleistung.",
         bild: { src: "lichtsystem-6.png", ar: 998 / 900, h: 1.0 } },
-      ls7: { name: "Lichtsystem 7", kurz: "2 Lichtstative mit LED-Hexagon", preis: 180, betreuung: true,
+      ls7: { name: "Lichtsystem 7", kurz: "2 Lichtstative", preis: 180, betreuung: true,
         punkte: ["2x große Hybrid Movingheads (Eurolite TMH H90)", "LED-Hexagon, bestehend aus 6 LED-Tubes"],
         text: "Zwei große Movingheads auf Stativen mit LED-Hexagon.",
         bild: { src: "lichtsystem-7.png", ar: 835 / 900, h: 1.0 } },
-      // Aus Komplettpaket 6: die LED-Bars hängen an den Lautsprecherstativen, deshalb nur mit
-      // Soundsystem 3 oder 4. Preis = Komplettpaket 6 (380 €) minus Soundsystem 4 (180 €).
-      ls7b: { name: "Lichtsystem 7 mit 2 LED-Bars", kurz: "Lichtsystem 7 + 2 LED-Bars an den Lautsprecherstativen", preis: 200, betreuung: true,
-        nurMit: ["ss3", "ss4"], ersatz: "ls7",
-        regel: "Nur mit Soundsystem 3 oder 4 möglich",
-        punkte: ["2x Lichtstative", "2x große Hybrid Movingheads (Eurolite TMH H90)", "2x LED-Bars", "1x LED-Hexagon, bestehend aus 6 LED-Tubes"],
-        text: "Dieser Lichtaufbau nutzt die Lautsprecherstative als Halterung und ist ausschließlich in Kombination mit Soundsystem 3 oder 4 verfügbar.",
-        bild: { src: "lichtsystem-7.png", ar: 835 / 900, h: 1.0, stangen: [0.108, 0.892] }, ledBars: true },
       ls8: { name: "Lichtsystem 8", kurz: "2 beleuchtete Traversentower", preis: 220, betreuung: true,
         punkte: ["4x große Hybrid Movingheads (Eurolite TMH H90)", "2x LED-Bar", "2x Strobe/LED-Mehrzweckscheinwerfer"],
         text: "Vier große Movingheads auf zwei Traversentowern – kraftvolle Lichteffekte für größere Flächen.",
         bild: { src: "lichtsystem-8.png", ar: 826 / 900, h: 1.03 } },
-      ls9: { name: "Lichtsystem 9", kurz: "2 Traversentower + LED-Hexagon", preis: 300, betreuung: true,
+      ls9: { name: "Lichtsystem 9", kurz: "2 beleuchtete Traversentower", preis: 300, betreuung: true,
         punkte: ["4x große Hybrid Movingheads (Eurolite TMH H90)", "2x LED-Bar", "2x Strobe/LED-Mehrzweckscheinwerfer", "LED-Hexagon, bestehend aus 6 LED-Tubes"],
         text: "Wie Lichtsystem 8, ergänzt um das LED-Hexagon als zusätzlichen optischen Blickfang.",
         bild: { src: "lichtsystem-9.png", ar: 1378 / 900, h: 1.03 } }
@@ -899,8 +887,9 @@
       slxd: { name: "Shure SLXD24+ / SM58", kurz: "kabelloses Handheld-Mikrofon", max: 2, preise: [0, 50, 80],
         punkte: ["digitales 1-Kanal UHF Wireless System", "Richtcharakteristik: Niere", "integrierte Shure Digital Feedback Reducer-Software"],
         bild: "images/extras/shure-slxd24.png" },
-      beta: { name: "Shure Beta 58 A", kurz: "kabelgebundenes Handheld-Mikrofon", max: 4, einzel: 10,
-        punkte: ["dynamisches Gesangsmikrofon", "Richtcharakteristik: Superniere", "höchste Rückkopplungssicherheit bei größtmöglicher Verstärkung"],
+      // Katalog: 10 € ohne Mengenangabe, also 1 Stück
+      beta: { name: "Shure Beta 58 A", kurz: "kabelgebundenes Handheld-Mikrofon", max: 1, einzel: 10,
+        punkte: ["dynamisches Gesangsmikrofon", "Richtcharakteristik: Superniere", "bietet höchste Rückkopplungssicherheit bei größtmöglicher Verstärkung"],
         bild: "images/extras/shure-beta-58a.png" }
     };
 
@@ -941,7 +930,7 @@
           { titel: "Soundsystem 3", kurz: "2 Hauptlautsprecher und 1 Subwoofer", punkte: ["2x RCF Art 910A / 912A; professioneller Lautsprecher mit bis zu 130 dB", "1x RCF Sub 8003 MK3, professioneller aktiver 18-Zoll-Subwoofer mit 135 dB"] },
           { titel: "Lichtsystem 6", punkte: ["2x beleuchtete Traversentower", "2x große Hybrid Movingheads (Eurolite TMH H90)", "2x Strobe/LED-Mehrzweckscheinwerfer", "2x LED-Bars"] }
         ] },
-      { sound: "ss4", licht: "ls7b", preis: 380, betreuung: true,
+      { sound: "ss4", licht: "ls7", lichtName: "Lichtsystem 7 mit 2 LED-Bars", preis: 380, betreuung: true,
         liste: [
           { titel: "Soundsystem 4", kurz: "2 Hauptlautsprecher und 2 Subwoofer", punkte: ["2x RCF Art 910A / 912A; professioneller Lautsprecher mit bis zu 130 dB", "2x RCF Sub 8003 MK3, professioneller aktiver 18-Zoll-Subwoofer mit 135 dB"] },
           { titel: "Lichtsystem 7 mit 2 LED-Bars", punkte: ["2x Lichtstative", "2x große Hybrid Movingheads (Eurolite TMH H90)", "2x LED-Bars", "1x LED-Hexagon, bestehend aus 6 LED-Tubes"] }
@@ -962,8 +951,7 @@
       slxd: 0,
       beta: 0,
       tubes: false,
-      ambiente: 0,
-      hinweis: ""
+      ambiente: 0
     };
 
     const $ = (id) => document.getElementById(id);
@@ -1069,7 +1057,7 @@
       document.querySelectorAll("#kp-buttons button").forEach((b, j) => b.setAttribute("aria-pressed", j === i ? "true" : "false"));
 
       $("kp-name").textContent = `Komplettpaket ${i + 1}`;
-      $("kp-subtitle").textContent = `${SOUND[kp.sound].name} + ${LICHT[kp.licht].name}`;
+      $("kp-subtitle").textContent = `${SOUND[kp.sound].name} + ${kp.lichtName || LICHT[kp.licht].name}`;
       $("kp-features").innerHTML = kp.liste.map((g) =>
         `<li><strong>${g.titel}</strong>${g.kurz ? `<span class="kurz">${g.kurz}</span>` : ""}<ul>${g.punkte.map((p) => `<li>${p}</li>`).join("")}</ul></li>`
       ).join("");
@@ -1084,37 +1072,22 @@
     function optionButton(key, item, group) {
       const b = el("button", { type: "button", class: "option", "aria-pressed": "false", "data-key": key });
       b.innerHTML =
-        `<span class="o-name">${item.name}${item.betreuung ? '<span class="o-betreuung" title="Nur mit technischer Betreuung buchbar">· mit Betreuung</span>' : ""}</span>` +
+        `<span class="o-name">${item.name}${item.betreuung ? '<span class="o-betreuung">· Technische Betreuung erforderlich</span>' : ""}</span>` +
         `<span class="o-price">${item.preis !== undefined ? euro(item.preis) : ""}</span>` +
         `<span class="o-kurz">${item.kurz}</span>` +
-        (item.regel ? `<span class="o-regel">${item.regel}</span>` : "") +
         (item.punkte ? `<span class="option-detail"><ul>${item.punkte.map((p) => `<li>${p}</li>`).join("")}</ul>${item.text ? `<p>${item.text}</p>` : ""}${item.betreuung ? note(BETREUUNG) : ""}</span>` : "");
-      b.addEventListener("click", () => waehle(group, state[group] === key ? null : key));
+      b.addEventListener("click", () => {
+        state[group] = state[group] === key ? null : key;
+        render();
+      });
       return b;
     }
 
     function noneButton(group, label) {
       const b = el("button", { type: "button", class: "option", "aria-pressed": "false", "data-key": "" },
         `<span class="o-name">${label}</span><span class="o-price"></span>`);
-      b.addEventListener("click", () => waehle(group, null));
+      b.addEventListener("click", () => { state[group] = null; render(); });
       return b;
-    }
-
-    // Sound oder Licht wählen und danach die Kombinationsregeln prüfen
-    function waehle(group, key) {
-      state[group] = key;
-      state.hinweis = "";
-      pruefeRegeln();
-      render();
-    }
-
-    // Lichtsystem 7 mit 2 LED-Bars braucht die Stative von Soundsystem 3 oder 4
-    function pruefeRegeln() {
-      const l = state.licht && LICHT[state.licht];
-      if (l && l.nurMit && !l.nurMit.includes(state.sound)) {
-        state.licht = l.ersatz;
-        state.hinweis = `Die 2 LED-Bars werden an den Lautsprecherstativen von Soundsystem 3 oder 4 befestigt. Deine Auswahl ist deshalb jetzt ${LICHT[l.ersatz].name} ohne LED-Bars.`;
-      }
     }
 
     function counterRow(key, item) {
@@ -1159,7 +1132,7 @@
       const seg = amb.querySelector(".segmented");
       for (const n of [0, 6, 12, 18]) {
         const b = el("button", { type: "button", "aria-pressed": "false", "data-n": n },
-          n === 0 ? "Keins<small>&nbsp;</small>" : `${n}er<small>${euro(AMBIENTE.stufen[n])}</small>`);
+          n === 0 ? "Keins<small>&nbsp;</small>" : `${n}er-Paket<small>${euro(AMBIENTE.stufen[n])}</small>`);
         b.addEventListener("click", () => { state.ambiente = n; render(); });
         seg.appendChild(b);
       }
@@ -1173,7 +1146,7 @@
       if (state.slxd) items.push({ name: `${state.slxd}x ${MIKRO.slxd.name}`, preis: micPrice("slxd", state.slxd) });
       if (state.beta) items.push({ name: `${state.beta}x ${MIKRO.beta.name}`, preis: micPrice("beta", state.beta) });
       if (state.tubes) items.push({ name: "LED-Tubes (Ape Labs Neon Tube PIX)", preis: TUBES.preis });
-      if (state.ambiente) items.push({ name: `Ambiente-Paket (${state.ambiente} LED-Strahler)`, preis: AMBIENTE.stufen[state.ambiente] });
+      if (state.ambiente) items.push({ name: `Ambiente-Paket (${state.ambiente}er-Paket)`, preis: AMBIENTE.stufen[state.ambiente] });
       return items;
     }
 
@@ -1182,19 +1155,19 @@
     }
 
     // Entspricht die Auswahl einem Komplettpaket?
+    function matchingPaketOhneExtras() {
+      return KOMPLETT.findIndex((kp) => kp.sound === state.sound && kp.licht === state.licht && !kp.lichtName);
+    }
+
     function matchingPaket() {
       const extras = state.slxd || state.beta || state.tubes || state.ambiente;
       if (extras) return -1;
-      return KOMPLETT.findIndex((kp) => kp.sound === state.sound && kp.licht === state.licht);
+      return KOMPLETT.findIndex((kp) => kp.sound === state.sound && kp.licht === state.licht && !kp.lichtName);
     }
 
     function renderBuilderPanel() {
       document.querySelectorAll("#opt-sound .option").forEach((b) => b.setAttribute("aria-pressed", (b.dataset.key || null) === state.sound ? "true" : "false"));
-      document.querySelectorAll("#opt-licht .option").forEach((b) => {
-        b.setAttribute("aria-pressed", (b.dataset.key || null) === state.licht ? "true" : "false");
-        const l = LICHT[b.dataset.key];
-        b.disabled = !!(l && l.nurMit && !l.nurMit.includes(state.sound));
-      });
+      document.querySelectorAll("#opt-licht .option").forEach((b) => b.setAttribute("aria-pressed", (b.dataset.key || null) === state.licht ? "true" : "false"));
 
       for (const k of Object.keys(MIKRO)) {
         const row = document.querySelector(`.counter-row[data-key="${k}"]`);
@@ -1205,7 +1178,7 @@
         plus.disabled = n >= MIKRO[k].max;
         row.classList.toggle("active", n > 0);
         const m = MIKRO[k];
-        const preisText = m.preise ? `${euro(m.preise[1])} (1 Mikrofon) · ${euro(m.preise[2])} (2 Mikrofone)` : `${euro(m.einzel)} pro Mikrofon`;
+        const preisText = m.preise ? `${euro(m.preise[1])} (1 Mikrofon) · ${euro(m.preise[2])} (2 Mikrofone)` : euro(m.einzel);
         row.querySelector(".o-kurz").textContent = `${m.kurz} · ${preisText}`;
       }
 
@@ -1262,7 +1235,8 @@
 
       // Entspricht Sound + Licht einem Komplettpaket, zeigen wir genau dessen Bild an
       // derselben Stelle. So springt beim "Paket anpassen" nichts.
-      const kp = state.tubes ? -1 : KOMPLETT.findIndex((k) => k.sound === state.sound && k.licht === state.licht);
+      // (Komplettpaket 6 enthält zusätzlich 2 LED-Bars und zählt deshalb nicht als Treffer)
+      const kp = state.tubes ? -1 : matchingPaketOhneExtras();
       const paketBild = piece("paket");
       if (kp >= 0) {
         platziere(paketBild, kpPlatz(kp, g));
@@ -1272,15 +1246,12 @@
       }
 
       // Sonst Reihenfolge von links nach rechts: Lautsprecher, Licht, Tubes, Lautsprecher
-      // (bei Lichtsystem 7 mit LED-Bars stehen die Tubes ganz rechts, damit die Bars frei hängen)
       const row = [];
-      const bars = kp < 0 && l && l.ledBars && s && s.rechts;
       if (kp < 0) {
         if (s) row.push({ ...s.links, slot: "soundL", src: "images/systeme/" + s.links.src, alt: s.name });
         if (l) row.push({ ...l.bild, slot: "licht", src: "images/systeme/" + l.bild.src, alt: l.name });
-        if (state.tubes && !bars) row.push({ ...TUBES.bild, slot: "tubes", alt: "LED-Tubes" });
+        if (state.tubes) row.push({ ...TUBES.bild, slot: "tubes", alt: "LED-Tubes" });
         if (s && s.rechts) row.push({ ...s.rechts, slot: "soundR", src: "images/systeme/" + s.rechts.src, alt: s.name });
-        if (state.tubes && bars) row.push({ ...TUBES.bild, slot: "tubes", alt: "LED-Tubes" });
       }
 
       let base = maxBase;
@@ -1297,37 +1268,18 @@
         platziere(img, { height: h + "px", left: x + "px", bottom: unten + "px" });
         setPiece(img, p.src, p.alt);
         used.add(p.slot);
-        p.x = x; p.hoehe = h;
         x += h * p.ar + gap();
       }
       for (const slot of ["soundL", "licht", "tubes", "soundR"]) {
         if (!used.has(slot) && pieces[slot]) setPiece(pieces[slot], null);
       }
 
-      // LED-Bars schräg von der Lautsprecherstange (halbe Höhe) zum Hexagon-Stativ
-      // (70 % der Höhe), wie im Katalogbild von Komplettpaket 6
-      const teil = (slot) => row.find((p) => p.slot === slot);
-      [["barL", "soundL", 0], ["barR", "soundR", 1]].forEach(([slot, seite, i]) => {
-        const img = piece(slot, "piece led-bar");
-        if (!bars) { setPiece(img, null); return; }
-        const sp = teil(seite), li = teil("licht");
-        const ax = sp.x + sp.hoehe * sp.ar * sp.stange, ay = H - unten - sp.hoehe * 0.5;
-        const bx = li.x + li.hoehe * li.ar * li.stangen[i], by = H - unten - li.hoehe * 0.7;
-        const laenge = Math.hypot(bx - ax, by - ay);
-        const winkel = Math.atan2(bx - ax, -(by - ay)) * 180 / Math.PI;
-        platziere(img, {
-          height: laenge + "px", left: (ax + bx) / 2 + "px", top: (ay + by) / 2 + "px", bottom: "auto",
-          transform: `translate(-50%, -50%) rotate(${winkel}deg)`
-        });
-        setPiece(img, "images/extras/led-bar.png", "LED-Bar");
-      });
-
-      // Ambiente: Strahler stehen hinten auf der Bühne (hinter der Technik)
-      // und werfen einen farbigen Lichtschein an die Wand
-      const n = { 0: 0, 6: 6, 12: 9, 18: 12 }[state.ambiente] || 0;
-      const spotW = maxBase * 0.075;
+      // Ambiente: genau so viele Strahler wie gewählt (6, 12 oder 18). Sie stehen hinten
+      // auf der Bühne (hinter der Technik) und werfen einen Lichtschein an die Wand
+      const n = state.ambiente;
+      const spotW = Math.min(maxBase * 0.075, ((W * 0.9) / Math.max(n, 1)) * 0.8);
       const farben = ["255, 60, 200", "150, 70, 255", "60, 120, 255"];
-      for (let i = 0; i < 12; i++) {
+      for (let i = 0; i < 18; i++) {
         const sp = piece("spot" + i, "spot");
         const glow = pieces["glow" + i] || (pieces["glow" + i] = $("layer-eigenes").appendChild(el("div", { class: "spot-glow" })));
         if (i < n) {
@@ -1352,9 +1304,9 @@
 
     function renderTray() {
       const items = [];
-      if (state.slxd) items.push({ img: MIKRO.slxd.bild, text: `${state.slxd}x Funkmikrofon` });
-      if (state.beta) items.push({ img: MIKRO.beta.bild, text: `${state.beta}x Kabelmikrofon` });
-      if (state.ambiente) items.push({ img: AMBIENTE.bild, text: `${state.ambiente} LED-Strahler` });
+      if (state.slxd) items.push({ img: MIKRO.slxd.bild, text: `${state.slxd}x ${MIKRO.slxd.name}` });
+      if (state.beta) items.push({ img: MIKRO.beta.bild, text: `${state.beta}x ${MIKRO.beta.name}` });
+      if (state.ambiente) items.push({ img: AMBIENTE.bild, text: `${AMBIENTE.name} (${state.ambiente}er-Paket)` });
       $("tray").innerHTML = items.map((t) => `<div class="tray-item"><img src="${t.img}" alt="">${t.text}</div>`).join("");
 
       const m = matchingPaket();
@@ -1373,7 +1325,7 @@
           titel: `Komplettpaket ${state.paket + 1}`,
           posten: [
             `${SOUND[kp.sound].name} (${SOUND[kp.sound].kurz})`,
-            `${LICHT[kp.licht].name} (${LICHT[kp.licht].kurz})`
+            `${kp.lichtName || LICHT[kp.licht].name} (${LICHT[kp.licht].kurz})`
           ],
           summe: kp.preis,
           betreuung: !!kp.betreuung
@@ -1401,7 +1353,7 @@
         ...a.posten.map((p) => `• ${p}`),
         "",
         `*Mietpreis: ${euro(a.summe)} pro Tag* (unverbindlich)`,
-        ...(a.betreuung ? ["Mit technischer Betreuung"] : []),
+        ...(a.betreuung ? [BETREUUNG] : []),
         "",
         "*Meine Veranstaltung*",
         ...FELDER.map((f) => `${f}: `),
@@ -1421,7 +1373,7 @@
         ...a.posten.map((p) => `- ${p}`),
         "",
         `Mietpreis: ${euro(a.summe)} pro Tag (unverbindlich, zzgl. Lieferung, Auf- und Abbau)`,
-        ...(a.betreuung ? ["Mit technischer Betreuung"] : []),
+        ...(a.betreuung ? [BETREUUNG] : []),
         "",
         "MEINE VERANSTALTUNG",
         ...FELDER.map((f) => `${f}: `),
@@ -1441,10 +1393,6 @@
           ? `<ul class="summary-list">${sel.map((s) => `<li><span>${s.name}</span><span>${euro(s.preis)}</span></li>`).join("")}</ul>`
           : `<p class="summary-empty">Noch nichts ausgewählt.</p>`;
         if (needsBetreuung()) summary += note(BETREUUNG);
-        if (state.hinweis) summary += hint(state.hinweis);
-        else if (state.licht === "ls7" && LICHT.ls7b.nurMit.includes(state.sound)) {
-          summary += hint("Tipp: Mit deinem Soundsystem geht auch Lichtsystem 7 mit 2 LED-Bars an den Lautsprecherstativen.");
-        }
       }
       $("foot-summary").innerHTML = summary;
       $("price").innerHTML = `${euro(summe)} <small>/ Tag</small>`;
@@ -1492,7 +1440,7 @@
 
     $("btn-anpassen").addEventListener("click", () => {
       const kp = KOMPLETT[state.paket];
-      Object.assign(state, { sound: kp.sound, licht: kp.licht, slxd: 0, beta: 0, tubes: false, ambiente: 0, hinweis: "" });
+      Object.assign(state, { sound: kp.sound, licht: kp.licht, slxd: 0, beta: 0, tubes: false, ambiente: 0 });
       setMode("eigenes");
       $("panel-eigenes").scrollTop = 0;
     });
@@ -1509,9 +1457,9 @@
     if (p >= 1 && p <= KOMPLETT.length) state.paket = p - 1;
     if (SOUND[params.get("sound")]) state.sound = params.get("sound");
     if (LICHT[params.get("licht")]) state.licht = params.get("licht");
-    for (const k of ["slxd", "beta", "ambiente"]) if (params.get(k)) state[k] = Number(params.get(k)) || 0;
+    for (const k of ["slxd", "beta"]) state[k] = Math.max(0, Math.min(MIKRO[k].max, Number(params.get(k)) || 0));
+    if (AMBIENTE.stufen[params.get("ambiente")] !== undefined) state.ambiente = Number(params.get("ambiente"));
     if (params.get("tubes") === "1") state.tubes = true;
-    pruefeRegeln();
     setMode(params.get("ansicht") === "eigenes" ? "eigenes" : "pakete");
   </script>
 </body>
