@@ -8,9 +8,11 @@ kann Claude direkt umsetzen (an der echten Seite nur nach eurem OK).
 
 ## Als Nächstes
 
-- [ ] **Ihr:** Passwortgeschützte Vorschau bei Cloudflare einrichten
-  (Anleitung im Chat vom 28.10.), Link und Passwort an den Chef von ConTec
-  schicken.
+- [x] **Ihr:** Passwortgeschützte Vorschau bei Cloudflare einrichten
+  (erledigt 28.10.): https://contec-konfigurator-vorschau.vemo-it-design.workers.dev
+  (Projekt `contec-konfigurator-vorschau` im VeMo-Konto, Branch
+  `test-pakete`, Passwort als Secret `SITE_PASSWORT`).
+- [ ] **Ihr:** Link und Passwort an den Chef von ConTec schicken.
 - [ ] **Ihr:** Bei der Abgabe den Chef von ConTec fragen (siehe unten),
   Antworten an Claude geben.
 - [ ] **Claude:** Antworten einbauen, danach nach eurem OK live schalten:
