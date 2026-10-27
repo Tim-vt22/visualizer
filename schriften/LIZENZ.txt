@@ -1,0 +1,37 @@
+Schriftlizenz
+=============
+
+Die Schriftdateien in diesem Ordner stammen aus dem Google-Fonts-Projekt
+und stehen unter der SIL Open Font License, Version 1.1 (OFL-1.1).
+
+  Barlow Condensed
+    Urheber:   Jeremy Tribby
+    Quelle:    https://fonts.google.com/specimen/Barlow+Condensed
+    Dateien:   barlow-condensed-400-latin.woff2
+               barlow-condensed-600-latin.woff2
+               barlow-condensed-700-latin.woff2
+
+Lizenztext der OFL-1.1:
+  https://openfontlicense.org/open-font-license-official-text/
+  https://scripts.sil.org/OFL
+
+Kurzfassung der Bedingungen:
+  - Nutzung, Einbettung, Weitergabe und Veraenderung sind erlaubt,
+    auch kommerziell.
+  - Die Schriften duerfen nicht isoliert verkauft werden.
+  - Bei Weitergabe muessen dieser Lizenzhinweis und die Urheberangabe
+    erhalten bleiben - genau dafuer existiert diese Datei.
+  - Veraenderte Versionen duerfen die Original-Schriftnamen nicht
+    weiterverwenden. Die Dateien hier sind unveraendert, lediglich auf
+    das Subset latin reduziert (so von Google ausgeliefert).
+
+Warum lokal statt per Link auf fonts.googleapis.com?
+----------------------------------------------------
+Diese Demo steckt auf der Startseite und im Portfolio in einem iframe und
+laedt dort automatisch mit. Solange sie die Schrift bei Google abgeholt
+hat, uebertrug jeder Besucher unserer Website seine IP-Adresse an Google,
+ohne je gefragt worden zu sein. Das ist ohne Einwilligung nicht gedeckt
+(vgl. LG Muenchen I, Urteil vom 20.01.2022, Az. 3 O 17493/20). Lokal
+gehostet passiert das nicht mehr.
+
+Heruntergeladen am 22.09.2026 von fonts.gstatic.com.

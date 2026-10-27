@@ -1,182 +1,240 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-design="a">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contec Set Visualizer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>ConTec Paket-Konfigurator</title>
+  <meta name="description" content="Stell dir dein Technik-Paket für dein Event zusammen: Komplettpakete oder eigenes Paket aus Sound- und Lichtsystemen von ConTec Eventtechnik." />
 
   <style>
+    /* Schriften lokal (keine Verbindung zu Google) */
+    @font-face {
+      font-family: "Barlow Condensed";
+      src: url("schriften/barlow-condensed-400-latin.woff2") format("woff2");
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Barlow Condensed";
+      src: url("schriften/barlow-condensed-600-latin.woff2") format("woff2");
+      font-weight: 600;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Barlow Condensed";
+      src: url("schriften/barlow-condensed-700-latin.woff2") format("woff2");
+      font-weight: 700;
+      font-display: swap;
+    }
+
+    /* Design A: Klassisch (wie bisher, schwarz + blau) */
+    :root {
+      --bg: #0a0a0a;
+      --panel: #111316;
+      --card: #171a1f;
+      --card-hover: #1e232a;
+      --line: rgba(0, 162, 255, 0.22);
+      --accent: #00a2ff;
+      --accent-dark: #0080cc;
+      --accent-soft: rgba(0, 162, 255, 0.14);
+      --text: #ffffff;
+      --muted: #a7afb8;
+      --warn: #ffb547;
+      --radius: 10px;
+      --radius-lg: 18px;
+      --shadow: 0 0 40px rgba(0, 162, 255, 0.25);
+      --stage-dim: brightness(0.62);
+      --stage-tint: rgba(0, 0, 0, 0);
+    }
+
+    /* Design B: Katalog (Petrol + Cyan, runde Karten wie im Mietkatalog) */
+    :root[data-design="b"] {
+      --bg: #0a201e;
+      --panel: #10302d;
+      --card: #163c38;
+      --card-hover: #1b4742;
+      --line: rgba(0, 173, 253, 0.28);
+      --accent: #00adfd;
+      --accent-dark: #0090d4;
+      --accent-soft: rgba(0, 173, 253, 0.16);
+      --muted: #b3cbc8;
+      --radius: 16px;
+      --radius-lg: 26px;
+      --shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 20px 60px rgba(0, 0, 0, 0.45);
+      --stage-dim: brightness(0.55) saturate(0.9);
+      --stage-tint: rgba(10, 45, 42, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font-family: "Barlow Condensed", sans-serif;
-      letter-spacing: 0.5px;
-      background: #0a0a0a;
-      color: #fff;
+      font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+      letter-spacing: 0.4px;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
     }
 
+    :root[data-design="b"] body {
+      background: radial-gradient(ellipse at top, #12403b 0%, var(--bg) 60%);
+    }
+
+    button { font-family: inherit; letter-spacing: inherit; }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* Kopfbereich */
     header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 2vw;
-      padding: 2vh 0;
       width: 100%;
-      position: relative;
-      max-width: 95vw;
-      margin: 0 auto;
-    }
-
-    .header-main {
+      max-width: 1600px;
       display: flex;
       align-items: center;
-      gap: 2vw;
-      flex: 1;
-      justify-content: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 24px 8px;
     }
 
-    .contact-btn {
-      position: absolute;
-      right: 0;
-      background: #00a2ff;
-      border: none;
-      color: #fff;
-      padding: clamp(0.8vh, 1.2vh, 1.5vh) clamp(1.5vw, 2.5vw, 3vw);
-      border-radius: 0.6vw;
-      font-size: clamp(0.7rem, 1vw + 0.3vh, 1.8rem);
-      font-family: "Barlow Condensed", sans-serif;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      text-decoration: none;
-      display: inline-block;
-      white-space: nowrap;
-      flex-shrink: 0;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      min-width: 0;
     }
 
-    .contact-btn:hover {
-      background: #0080cc;
-      box-shadow: 0 0 15px #00a2ff66;
-      transform: translateY(-2px);
+    .brand img {
+      height: clamp(48px, 8vh, 90px);
+      width: auto;
     }
 
-    header img {
-      height: clamp(6vh, 12vh, 15vh);
-      margin-top: -0.5vh;
-    }
-
-    header h1 {
-      font-weight: 700;
-      font-size: clamp(1.2rem, 3vw + 0.5vh, 4rem);
-      color: #00a2ff;
-      text-transform: uppercase;
+    .brand h1 {
       margin: 0;
+      font-weight: 700;
+      font-size: clamp(1.3rem, 2.4vw + 0.4vh, 3rem);
+      color: var(--accent);
+      text-transform: uppercase;
+      line-height: 1;
     }
 
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        gap: 1.5vh;
-        padding: 1.5vh 2vw;
-      }
-
-      .header-main {
-        gap: 3vw;
-        margin-right: 0;
-      }
-
-      .contact-btn {
-        position: static;
-        padding: 1.2vh 6vw;
-        font-size: 1rem;
-        border-radius: 4px;
-      }
-
-      header img {
-        height: 7vh;
-      }
-
-      header h1 {
-        font-size: 1.3rem;
-      }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: var(--radius);
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease, color 0.25s ease;
+      white-space: nowrap;
     }
 
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-dark); box-shadow: 0 0 15px var(--accent-soft); transform: translateY(-2px); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--accent);
+      box-shadow: inset 0 0 0 1.5px var(--accent);
+    }
+    .btn-ghost:hover { background: var(--accent-soft); }
+
+    .btn-whatsapp { background: #1fa855; color: #fff; }
+    .btn-whatsapp:hover { background: #178a45; transform: translateY(-2px); }
+
+    .btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* Umschalter Komplettpakete / Eigenes Paket */
+    .mode-switch {
+      display: inline-flex;
+      background: var(--panel);
+      border-radius: 999px;
+      padding: 5px;
+      gap: 4px;
+      margin: 4px 0 12px;
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+
+    .mode-switch button {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: clamp(1rem, 0.6vw + 0.8rem, 1.35rem);
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 8px 22px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    .mode-switch button[aria-selected="true"] { background: var(--accent); color: #fff; }
+    .mode-switch button:not([aria-selected="true"]):hover { color: #fff; }
+
+    /* Hauptbereich */
     main {
       display: flex;
-      width: 95vw;
-      height: 80vh;
-      background: #0f0f0f;
-      border-radius: 1.5vw;
-      box-shadow: 0 0 40px rgba(0, 162, 255, 0.25);
-      overflow: hidden;
-      margin-top: 1vh;
-    }
-
-    .stage-wrapper {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .info-panel {
-      width: 28%;
-      background: rgba(17, 17, 17, 0.95);
-      padding: 2vw;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      border-right: 2px solid #00a2ff33;
+      width: min(1600px, calc(100vw - 32px));
+      height: calc(100vh - 222px);
+      min-height: 560px;
+      background: var(--panel);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
       overflow: hidden;
     }
 
-    .info-panel-content {
-      margin-top: -4vh;
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding-right: 1vw;
-      flex: 1;
+    .panel {
+      width: clamp(320px, 30%, 460px);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      border-right: 2px solid var(--line);
       min-height: 0;
     }
 
-    .info-panel-content::-webkit-scrollbar {
-      width: 8px;
+    .panel-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 22px 22px 10px;
+      min-height: 0;
     }
 
-    .info-panel-content::-webkit-scrollbar-track {
-      background: rgba(0, 162, 255, 0.1);
-      border-radius: 4px;
+    .panel-scroll::-webkit-scrollbar { width: 8px; }
+    .panel-scroll::-webkit-scrollbar-track { background: var(--accent-soft); border-radius: 4px; }
+    .panel-scroll::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+    .panel h2 {
+      color: var(--accent);
+      font-size: clamp(1.7rem, 1.8vw + 0.5rem, 2.6rem);
+      margin: 0 0 2px;
+      line-height: 1.05;
     }
 
-    .info-panel-content::-webkit-scrollbar-thumb {
-      background: #00a2ff;
-      border-radius: 4px;
+    :root[data-design="b"] .bracket::before { content: "["; }
+    :root[data-design="b"] .bracket::after { content: "]"; }
+
+    .subtitle {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #fff;
+      margin: 0 0 14px;
     }
 
-    .info-panel-content::-webkit-scrollbar-thumb:hover {
-      background: #0080cc;
-    }
-
-    .info-panel h2 {
-      color: #00a2ff;
-      font-size: clamp(1.6rem, 2.3vw + 0.4vh, 3.2rem);
-      margin-bottom: 1vh;
-      letter-spacing: 0.5px;
-    }
-
-    .info-panel p {
-      font-size: clamp(1rem, 1vw + 0.3vh, 1.3rem);
-      color: #ccc;
-      margin-bottom: 2vh;
-      line-height: 1.5;
+    .lead {
+      color: var(--muted);
+      font-size: 1.1rem;
+      line-height: 1.45;
+      margin: 0 0 14px;
     }
 
     .features {
@@ -185,353 +243,1165 @@
       margin: 0;
     }
 
-    .features li {
-      margin-bottom: 1.5vh;
-    }
+    .features > li { margin-bottom: 14px; }
 
     .features strong {
-      color: #00a2ff;
-      font-size: clamp(1.1rem, 1.2vw + 0.4vh, 1.6rem);
       display: block;
-      margin-bottom: 0.3vh;
-      letter-spacing: 0.3px;
+      color: var(--accent);
+      font-size: 1.3rem;
+      margin-bottom: 2px;
     }
 
-    .features span {
-      color: #aaa;
-      font-size: clamp(0.95rem, 0.9vw + 0.3vh, 1.2rem);
-      white-space: pre-line;
-      display: block;
-      margin-left: 0.5vw;
+    .features .kurz { color: #fff; font-size: 1.1rem; display: block; margin-bottom: 2px; }
+
+    .features ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 1.05rem;
       line-height: 1.4;
     }
 
-    .price {
-      font-size: clamp(1.4rem, 1.8vw + 0.5vh, 2.4rem);
-      color: #00a2ff;
-      font-weight: 700;
-      text-align: center;
-      margin-top: 1vh;
-      border-top: 1px solid #00a2ff33;
-      padding-top: 1.2vh;
-      align-self: center;
-      letter-spacing: 0.5px;
+    .hint {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      background: var(--accent-soft);
+      border-radius: var(--radius);
+      padding: 9px 12px;
+      font-size: 1.02rem;
+      line-height: 1.35;
+      color: #dfe9f1;
+      margin: 0 0 10px;
     }
 
-    .stage-area {
+    .hint.warn { background: rgba(255, 181, 71, 0.12); color: #ffe2b3; }
+    .hint svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+
+    .panel-foot {
+      border-top: 1px solid var(--line);
+      padding: 14px 22px 18px;
+      background: var(--panel);
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .price-label { color: var(--muted); font-size: 1.1rem; }
+
+    .price {
+      font-size: clamp(1.8rem, 1.6vw + 0.8rem, 2.6rem);
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .price small { font-size: 0.5em; color: var(--muted); font-weight: 600; }
+
+    .fineprint { color: var(--muted); font-size: 0.92rem; line-height: 1.3; margin: 2px 0 10px; }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .actions .btn { flex: 1 1 auto; font-size: 1rem; padding: 10px 14px; }
+
+    /* Baukasten */
+    .step { margin-bottom: 22px; }
+
+    .step-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .step-head h3 {
+      margin: 0;
+      font-size: 1.35rem;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .step-head h3 span { color: var(--accent); margin-right: 6px; }
+    .step-head .step-note { color: var(--muted); font-size: 0.95rem; }
+
+    .options { display: flex; flex-direction: column; gap: 6px; }
+
+    .option {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 2px 10px;
+      width: 100%;
+      text-align: left;
+      background: var(--card);
+      border: 1.5px solid transparent;
+      border-radius: var(--radius);
+      padding: 9px 12px;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .option:hover { background: var(--card-hover); }
+    .option[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+
+    .option .o-name { font-size: 1.15rem; font-weight: 600; }
+    .option .o-price { font-size: 1.15rem; font-weight: 700; color: var(--accent); }
+    .option .o-kurz { grid-column: 1 / -1; color: var(--muted); font-size: 0.98rem; }
+
+    .option .o-badge {
+      display: inline-block;
+      margin-left: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--warn);
+      border: 1px solid rgba(255, 181, 71, 0.5);
+      border-radius: 4px;
+      padding: 0 5px;
+      vertical-align: 2px;
+      text-transform: uppercase;
+    }
+
+    .option-detail {
+      grid-column: 1 / -1;
+      display: none;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.35;
+    }
+
+    .option[aria-pressed="true"] .option-detail { display: block; }
+    .option-detail ul { margin: 0 0 4px; padding-left: 18px; }
+    .option-detail p { margin: 0; font-style: italic; }
+
+    .counter-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2px 10px;
+      align-items: center;
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 9px 12px;
+      border: 1.5px solid transparent;
+    }
+
+    .counter-row.active { border-color: var(--accent); background: var(--accent-soft); }
+    .counter-row .o-name { font-size: 1.15rem; font-weight: 600; }
+    .counter-row .o-kurz { color: var(--muted); font-size: 0.98rem; }
+
+    .counter {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      grid-row: 1 / span 2;
+      grid-column: 2;
+    }
+
+    .counter button {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: none;
+      background: var(--card-hover);
+      color: #fff;
+      font-size: 1.3rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .counter button:hover:not(:disabled) { background: var(--accent); }
+    .counter button:disabled { opacity: 0.35; cursor: default; }
+    .counter output { min-width: 22px; text-align: center; font-size: 1.25rem; font-weight: 700; }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      margin-top: 6px;
+      grid-column: 1 / -1;
+    }
+
+    .segmented button {
+      background: var(--card-hover);
+      border: 1.5px solid transparent;
+      border-radius: calc(var(--radius) - 3px);
+      color: #fff;
+      padding: 6px 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      line-height: 1.15;
+    }
+
+    .segmented button small { display: block; color: var(--muted); font-size: 0.85rem; }
+    .segmented button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+
+    .summary-list {
+      list-style: none;
+      margin: 0 0 8px;
+      padding: 0;
+      font-size: 1.05rem;
+      max-height: 7.5em;
+      overflow-y: auto;
+    }
+
+    .summary-list li { display: flex; justify-content: space-between; gap: 10px; color: var(--muted); }
+    .summary-list li span:last-child { color: #fff; }
+    .summary-empty { color: var(--muted); font-size: 1.05rem; margin: 0 0 8px; }
+
+    /* Bühne */
+    .stage-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .stage {
       flex: 1;
       position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       overflow: hidden;
+      min-height: 0;
     }
 
-    .stage-area::before {
+    .stage::before {
       content: "";
       position: absolute;
-      top: 0; 
-      left: 0; 
-      right: 0; 
-      bottom: 0;
-      background: url('images/stage.png') center center / cover no-repeat;
+      inset: 0;
+      background: url("images/stage.png") center calc(50% - 2vh) / cover no-repeat;
+      filter: var(--stage-dim);
       z-index: 0;
-      filter: brightness(0.7) blur(0px);
-      background-size: cover;
-      background-position: center calc(50% - 2vh);
-      transition: background-position 0.6s ease, filter 0.6s ease;
     }
 
-    @media (max-width: 900px) {
-      .stage-area::before {
-        background-position: center calc(50% - 1vh);
-        filter: brightness(0.75);
-      }
+    .stage::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--stage-tint);
+      z-index: 0;
+      pointer-events: none;
     }
 
-    @media (max-width: 600px) {
-      .stage-area::before {
-        background-position: center calc(50% - 0.5vh);
-        filter: brightness(0.8);
-      }
-    }
+    .layer { position: absolute; inset: 0; z-index: 1; transition: opacity 0.4s ease; }
+    .layer[hidden] { display: block; opacity: 0; pointer-events: none; }
 
-    .stage-image {
-      object-fit: contain;
-      display: block;
+    .kp-image {
       position: absolute;
       left: 50%;
       top: 50%;
-      transform: translate(-50%, -50%);
-      width: 100%;
-      height: 100%;
-      max-width: none;
-      max-height: none;
-      opacity: 0;
-      transition: opacity 0.8s ease, transform 0.8s ease;
-      pointer-events: none;
-      filter: blur(6px);
-      z-index: 2;
-    }
-
-    #img-XS, #img-S {
-      width: 90%;
+      width: 94%;
       height: 90%;
-      top: 50%;
-    }
-
-    .visible {
-      opacity: 1;
+      object-fit: contain;
       transform: translate(-50%, -50%);
-      filter: blur(0);
-      z-index: 2;
+      opacity: 0;
+      filter: blur(6px);
+      transition: opacity 0.6s ease, filter 0.6s ease;
+      pointer-events: none;
     }
 
+    .kp-image.visible { opacity: 1; filter: blur(0); }
+
+    .piece {
+      position: absolute;
+      bottom: 5%;
+      height: 0;
+      opacity: 0;
+      transition: left 0.5s ease, height 0.5s ease, opacity 0.35s ease;
+      pointer-events: none;
+    }
+
+    .piece.visible { opacity: 1; }
+
+    .spot {
+      position: absolute;
+      bottom: 2.5%;
+      opacity: 0;
+      transition: opacity 0.35s ease, left 0.5s ease;
+      pointer-events: none;
+      filter: drop-shadow(0 0 10px rgba(180, 60, 255, 0.55));
+    }
+
+    .spot.visible { opacity: 1; }
+
+    .tray {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 3;
+    }
+
+    .tray-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 6px 10px 6px 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      backdrop-filter: blur(4px);
+    }
+
+    .tray-item img { height: 40px; width: 56px; object-fit: contain; }
+
+    .stage-empty {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      z-index: 2;
+      color: #fff;
+      font-size: clamp(1.2rem, 1.2vw + 0.7rem, 2rem);
+      font-weight: 600;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+      transition: opacity 0.3s ease;
+    }
+
+    .stage-empty[hidden] { display: flex; opacity: 0; pointer-events: none; }
+    .stage-empty span { display: block; color: var(--accent); font-size: 0.7em; margin-top: 6px; }
+
+    .match-badge {
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      z-index: 3;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      transition: opacity 0.3s ease;
+    }
+
+    .match-badge[hidden] { display: block; opacity: 0; pointer-events: none; }
+
+    /* Leiste unter der Bühne */
     .controls {
       display: flex;
-      gap: 1.5vw;
-      justify-content: center;
       align-items: center;
-      padding: 2vh 0;
-      border-top: 1px solid #00a2ff33;
+      justify-content: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-top: 1px solid var(--line);
       position: relative;
+      min-height: 72px;
     }
 
-    .controls button {
-      background: #00a2ff;
+    .kp-buttons {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .kp-buttons::-webkit-scrollbar { display: none; }
+    .kp-buttons[hidden], .btn[hidden] { display: none; }
+
+    .kp-buttons button {
+      background: var(--accent);
       border: none;
       color: #fff;
-      padding: 1.5vh 3vw;
-      border-radius: 0.6vw;
-      font-size: clamp(1.2rem, 1.8vw + 0.5vh, 2.5rem);
+      border-radius: var(--radius);
+      min-width: 64px;
+      padding: 6px 14px 5px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      line-height: 1.05;
+      transition: background 0.25s ease, transform 0.25s ease, color 0.25s ease;
+      flex-shrink: 0;
     }
 
-    .controls button:hover {
-      background: #0080cc;
-      box-shadow: 0 0 15px #00a2ff66;
-      transform: translateY(-2px);
-    }
+    .kp-buttons button b { display: block; font-size: clamp(1.3rem, 1vw + 0.8rem, 1.9rem); }
+    .kp-buttons button small { display: block; font-size: 0.85rem; opacity: 0.85; }
+    .kp-buttons button:hover { background: var(--accent-dark); transform: translateY(-2px); }
+    .kp-buttons button[aria-pressed="true"] { background: #fff; color: #000; }
 
-    .controls button.active {
-      color: #000;
-    }
+    :root[data-design="b"] .kp-buttons button { background: var(--card); box-shadow: inset 0 0 0 1.5px var(--line); }
+    :root[data-design="b"] .kp-buttons button:hover { background: var(--card-hover); }
+    :root[data-design="b"] .kp-buttons button[aria-pressed="true"] { background: var(--accent); color: #fff; box-shadow: none; }
 
-    .info-btn-wrapper {
+    .builder-help { color: var(--muted); font-size: 1.1rem; text-align: center; }
+    .mobile-only { display: none; }
+
+    .catalog-link {
       position: absolute;
-      right: 2vw;
+      right: 16px;
       top: 50%;
       transform: translateY(-50%);
-      z-index: 1001;
-    }
-
-    .info-btn {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 0;
       display: flex;
       align-items: center;
-      justify-content: center;
-      width: clamp(35px, 4vh, 50px);
-      height: clamp(35px, 4vh, 50px);
-      aspect-ratio: 1 / 1;
-      transition: all 0.3s ease;
-    }
-
-    .info-btn img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-    }
-
-    .info-btn:hover img {
-      filter: brightness(1.2);
-      transform: scale(1.05);
-    }
-
-    .info-tooltip {
-      position: absolute;
-      bottom: calc(100% + 5px);
-      right: -5px;
-      background: #000;
-      color: #fff;
-      padding: clamp(0.8vh, 1vh, 1.2vh) clamp(1vw, 1.5vw, 2vw);
-      border-radius: 0.6vw;
-      font-size: clamp(0.75rem, 0.9vw + 0.2vh, 1.1rem);
-      white-space: normal;
-      max-width: 250px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 1000;
-      border: 1px solid #00a2ff;
-      line-height: 1.4;
-    }
-
-    .info-tooltip.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .info-tooltip a {
-      color: #00a2ff;
+      gap: 6px;
+      color: var(--accent);
       text-decoration: none;
       font-weight: 600;
+      font-size: 1rem;
     }
 
-    .info-tooltip a:hover {
-      text-decoration: underline;
+    .catalog-link img { width: 34px; height: 34px; }
+    .catalog-link:hover span { text-decoration: underline; }
+
+    footer {
+      width: min(1600px, calc(100vw - 32px));
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      padding: 10px 4px 14px;
     }
 
-    @media (max-width: 768px) {
-      .info-btn-wrapper {
-        right: 3vw;
-      }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
 
-      .info-btn {
-        width: 40px;
-        height: 40px;
-      }
-
-      .info-tooltip {
-        max-width: 200px;
-        font-size: 0.8rem;
-        padding: 1vh 2vw;
-        right: 0;
-        white-space: normal;
-      }
-
-      .controls {
-        padding: 1.5vh 0;
-      }
-
-      .controls button {
-        font-size: clamp(1rem, 4vw, 1.5rem);
-        padding: 1.2vh 2.5vw;
-      }
+    /* Nur für die Vorschau: Design A/B umschalten */
+    .design-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 181, 71, 0.12);
+      border: 1px dashed rgba(255, 181, 71, 0.6);
+      border-radius: 999px;
+      padding: 3px 4px 3px 12px;
+      color: #ffe2b3;
     }
 
-    @media (max-width: 480px) {
-      .info-tooltip {
-        max-width: 180px;
-        font-size: 0.75rem;
+    .design-switch button {
+      background: transparent;
+      border: none;
+      color: #ffe2b3;
+      padding: 3px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+
+    .design-switch button[aria-pressed="true"] { background: var(--warn); color: #000; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
+
+    /* Tablet / Handy */
+    @media (max-width: 900px) {
+      header { padding: 12px 16px 6px; }
+      .brand { gap: 10px; }
+      .brand img { height: 46px; }
+      .header-cta { padding: 9px 14px; font-size: 1rem; }
+
+      main {
+        flex-direction: column-reverse;
+        height: auto;
+        min-height: 0;
+        width: calc(100vw - 24px);
+        overflow: clip; /* nicht hidden, sonst funktioniert position: sticky nicht */
       }
+
+      /* Eigenes Paket: Bühne bleibt oben stehen, Preis unten */
+      body[data-mode="eigenes"] .stage-wrapper { position: sticky; top: 0; z-index: 6; background: var(--panel); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45); }
+      body[data-mode="eigenes"] .controls { display: none; }
+      body[data-mode="eigenes"] .stage { height: min(60vw, 34vh); min-height: 190px; }
+      body[data-mode="eigenes"] .panel-foot .summary-list,
+      body[data-mode="eigenes"] .panel-foot .fineprint { display: none; }
+      .mobile-only { display: block; }
+      .kp-buttons { display: grid; grid-template-columns: repeat(7, 1fr); width: 100%; }
+      .kp-buttons button { min-width: 0; padding: 5px 0 4px; }
+
+      .panel { width: 100%; border-right: none; border-top: 2px solid var(--line); }
+      .panel-scroll { overflow: visible; padding: 18px 16px 6px; }
+
+      body[data-mode="eigenes"] .panel-foot {
+        position: sticky;
+        bottom: 0;
+        z-index: 5;
+        padding: 10px 16px 12px;
+        box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.45);
+      }
+
+      .stage { height: min(62vw, 56vh); min-height: 260px; flex: none; }
+      .controls { flex-direction: column; gap: 8px; min-height: 0; }
+      .catalog-link { position: static; transform: none; }
+      .kp-buttons { max-width: 100%; padding-bottom: 2px; }
+      .tray-item img { height: 28px; width: 40px; }
+      .tray-item { font-size: 0.9rem; }
+      .summary-list { max-height: none; }
+      footer { width: calc(100vw - 24px); justify-content: center; text-align: center; }
+    }
+
+    @media (max-width: 520px) {
+      .brand h1 { font-size: 1.15rem; }
+      .brand img { height: 38px; }
+      .mode-switch button { padding: 7px 14px; font-size: 1rem; }
+      .kp-buttons { gap: 5px; }
+      .kp-buttons button small { font-size: 0.75rem; }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="header-main">
-      <img src="images/CT_Logo_Transparent_Querformat(1).svg" alt="Contec Logo" />
-      <h1>Set Visualizer</h1>
+    <div class="brand">
+      <img src="images/CT_Logo_Transparent_Querformat(1).svg" alt="ConTec Eventtechnik" />
+      <h1>Paket-Konfigurator</h1>
     </div>
-    <a href="https://www.contec-eventtechnik.de/buchen" 
-       class="contact-btn" 
-       target="_blank"
-       rel="noopener noreferrer">Jetzt Buchen</a>
+    <a href="https://www.contec-eventtechnik.de/buchen" class="btn btn-primary header-cta" target="_blank" rel="noopener noreferrer">Jetzt anfragen</a>
   </header>
 
-  <main>
-    <div class="info-panel" id="info">
-      <div class="info-panel-content">
-        <h2 id="set-name">Set M</h2>
-        <p id="set-description">Paket M liefert kraftvollen Sound und beeindruckende Lichttechnik für mittelgroße Events – zuverlässig, vielseitig und stimmungsvoll.</p>
-        <ul class="features" id="set-features">
-          <li><strong>Soundsystem M</strong><span>2 Hauptlautsprecher + 1 Subwoofer
-- 2x RCF Art 912A
-- professioneller Aktivlautsprecher mit neuster Technik
-- 130 dB Schalldruck
-- 1x RCF Sub 8003 MK3
-- 18 Zoll Subwoofer, 2200 W Leistung, 135 dB Schalldruck</span></li>
-          <li><strong>Lichtsystem M</strong><span>2 beleuchtete Traversentower
-- 2x große Hybrid Movingheads (Eurolite TMH H90)
-- 2x LED Bar
-- 2x LED Fluter/Stroboskop</span></li>
-        </ul>
-      </div>
-      <div class="price" id="set-price">Preis: 300 €</div>
-    </div>
+  <div class="mode-switch" role="tablist" aria-label="Ansicht wählen">
+    <button role="tab" id="tab-pakete" aria-selected="true" data-mode="pakete">Komplettpakete</button>
+    <button role="tab" id="tab-eigenes" aria-selected="false" data-mode="eigenes">Eigenes Paket</button>
+  </div>
 
-    <div class="stage-wrapper">
-      <div class="stage-area">
-        <img src="images/PXS.png" id="img-XS" class="stage-image" alt="Set XS">
-        <img src="images/PS (2).png" id="img-S" class="stage-image" alt="Set S">
-        <img src="images/PM.png" id="img-M" class="stage-image visible" alt="Set M">
-        <img src="images/PL(2).png" id="img-L" class="stage-image" alt="Set L">
+  <main>
+    <section class="panel" aria-live="polite">
+      <!-- Komplettpakete -->
+      <div class="panel-scroll" id="panel-pakete">
+        <h2 class="bracket" id="kp-name">Komplettpaket 1</h2>
+        <p class="subtitle" id="kp-subtitle"></p>
+        <ul class="features" id="kp-features"></ul>
+        <div id="kp-hints"></div>
+      </div>
+
+      <!-- Eigenes Paket -->
+      <div class="panel-scroll" id="panel-eigenes" hidden>
+        <h2 class="bracket">Eigenes Paket</h2>
+        <p class="lead">Stell dir dein Paket selbst zusammen: Wähle ein Sound- und ein Lichtsystem und ergänze Mikrofone oder Extras. Die Bühne zeigt dir live, wie es aussieht.</p>
+
+        <div class="step">
+          <div class="step-head"><h3><span>1</span>Soundsystem</h3></div>
+          <div class="options" id="opt-sound"></div>
+        </div>
+
+        <div class="step">
+          <div class="step-head"><h3><span>2</span>Lichtsystem</h3></div>
+          <div class="options" id="opt-licht"></div>
+        </div>
+
+        <div class="step">
+          <div class="step-head"><h3><span>3</span>Mikrofone</h3><span class="step-note">optional</span></div>
+          <div class="options" id="opt-mikro"></div>
+        </div>
+
+        <div class="step">
+          <div class="step-head"><h3><span>4</span>Extras</h3><span class="step-note">optional</span></div>
+          <div class="options" id="opt-extras"></div>
+        </div>
+
+        <p class="hint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <span>Unsicher, welches System zu deiner Veranstaltung passt? Schick uns gerne Fotos oder Maße deiner Location, dann beraten wir dich individuell.</span>
+        </p>
+        <p class="fineprint mobile-only">Alle Preise sind reine Mietpreise pro Einsatztag und unverbindlich. Lieferung, Auf- und Abbau sowie technische Betreuung werden gesondert berechnet.</p>
+      </div>
+
+      <div class="panel-foot">
+        <div id="foot-summary"></div>
+        <div class="price-row">
+          <span class="price-label">Mietpreis</span>
+          <span class="price" id="price">100 € <small>/ Tag</small></span>
+        </div>
+        <p class="fineprint">Reiner Mietpreis pro Einsatztag, unverbindlich. Lieferung, Auf- und Abbau sowie technische Betreuung werden gesondert berechnet.</p>
+        <div class="actions">
+          <a class="btn btn-whatsapp" id="btn-whatsapp" href="#" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3 1 2.6 1.1 2.8.1.2 1.9 2.9 4.6 4 1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.4-.2z"/></svg>
+            WhatsApp
+          </a>
+          <a class="btn btn-ghost" id="btn-mail" href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            E-Mail
+          </a>
+          <button class="btn btn-ghost" id="btn-anpassen" type="button">Paket anpassen</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="stage-wrapper">
+      <div class="stage" id="stage">
+        <div class="layer" id="layer-pakete"></div>
+        <div class="layer" id="layer-eigenes" hidden>
+          <div class="tray" id="tray"></div>
+          <div class="match-badge" id="match-badge" hidden></div>
+          <div class="stage-empty" id="stage-empty">Wähle ein Sound- oder Lichtsystem<span>Deine Bühne baut sich hier live auf</span></div>
+        </div>
       </div>
 
       <div class="controls">
-        <button onclick="setStage('XS')" data-set="XS">XS</button>
-        <button onclick="setStage('S')" data-set="S">S</button>
-        <button onclick="setStage('M')" data-set="M" class="active">M</button>
-        <button onclick="setStage('L')" data-set="L">L</button>
-
-        <!-- Info-Bild als klickbares Bild -->
-        <div class="info-btn-wrapper" onmouseenter="showTooltip()" onmouseleave="hideTooltip()">
-          <img src="images/image.psd(1).png" alt="Info" class="info-btn" onclick="openPDF()">
-          <div class="info-tooltip" id="tooltip">
-            Für den vollen Umfang an Informationen schauen sie sich den kompletten 
-            <a href="images/Mietkatalog_ConTec_Eventtechnik.pdf" target="_blank" rel="noopener noreferrer">Mietkatalog</a> an.
-          </div>
-        </div>
+        <div class="kp-buttons" id="kp-buttons" role="group" aria-label="Komplettpaket wählen"></div>
+        <div class="builder-help" id="builder-help" hidden>Deine Auswahl wird maßstabsgetreu auf der Bühne angezeigt.</div>
+        <a class="catalog-link" href="images/Mietkatalog_ConTec_Eventtechnik.pdf" target="_blank" rel="noopener noreferrer" title="Kompletter Mietkatalog als PDF">
+          <img src="images/info.png" alt="" />
+          <span>Mietkatalog (PDF)</span>
+        </a>
       </div>
-    </div>
+    </section>
   </main>
 
+  <footer>
+    <span>ConTec Eventtechnik · <a href="mailto:info@contec-eventtechnik.com">info@contec-eventtechnik.com</a> · <a href="https://wa.me/4917651968537" target="_blank" rel="noopener noreferrer">+49 176 51968537</a></span>
+    <span class="design-switch" id="design-switch" title="Nur in der Testversion sichtbar">Vorschau-Design:
+      <button type="button" data-design="a" aria-pressed="true">A Klassisch</button>
+      <button type="button" data-design="b" aria-pressed="false">B Katalog</button>
+    </span>
+  </footer>
+
   <script>
-    const sets = {
-      XS: { image: "img-XS", description: 'Das Paket XS bietet kompakte Licht- und Tontechnik für kleine Feiern, dank Akkubetrieb auch völlig unabhängig vom Stromnetz.', features: [ { title: 'Soundsystem XS', desc: '1 akkubetriebener Hauptlautsprecher\n- bis zu 126 dB Schalldruck\n- bis zu 40h Akkulaufzeit bei mittlerer Lautstärke\n- bis zu 5h Akkulaufzeit bei voller Lautstärke' }, { title: 'Lichtsystem XS', desc: 'Lichtstativ mit 4 LED-Strahlern\n- 4x Ape Labs Maxi V2\n- akkubetriebene Scheinwerfer mit hoher Helligkeit' } ], price: '100 €' },
-      S:  { image: "img-S", description: 'Mit dem Paket S erhältst du solide Soundqualität und stimmungsvolle Lichteffekte. Ideal für Geburtstage oder kleine Partys.', features: [ { title: 'Soundsystem S', desc: '1 Hauptlautsprecher + 1 Subwoofer\n- RCF Art 315A in Soundboks Optik mit bis zu 128 dB Schalldruck\n- aktiver 18 Zoll Subwoofer mit bis zu 131 dB Schalldruck' }, { title: 'Lichtsystem S', desc: '1 beleuchteter Traversentower\n- 2x kleine Movingheads (Purelight Muvy SpotOne)\n- 1x LED Bar\n- 1x LED Fluter/Stroboskop' } ], price: '180 €' },
-      M:  { image: "img-M", description: 'Paket M liefert kraftvollen Sound und beeindruckende Lichttechnik für mittelgroße Events – zuverlässig, vielseitig und stimmungsvoll.', features: [ { title: 'Soundsystem M', desc: '2 Hauptlautsprecher + 1 Subwoofer\n- 2x RCF Art 912A\n- professioneller Aktivlautsprecher mit neuster Technik\n- 130 dB Schalldruck\n- 1x RCF Sub 8003 MK3\n- 18 Zoll Subwoofer, 2200 W Leistung, 135 dB Schalldruck' }, { title: 'Lichtsystem M', desc: '2 beleuchtete Traversentower\n- 2x große Hybrid Movingheads (Eurolite TMH H90)\n- 2x LED Bar\n- 2x LED Fluter/Stroboskop' } ], price: '300 €' },
-      L:  { image: "img-L", description: 'Unser größtes Paket L kombiniert leistungsstarke Technik mit spektakulären Lichteffekten für unvergessliche Events.', features: [ { title: 'Soundsystem L', desc: '2 Hauptlautsprecher + 2 Subwoofer\n- 2x RCF Art 912A\n- 2x RCF Sub 8003 MK3\n- 2200 W Leistung, 135 dB Schalldruck' }, { title: 'Lichtsystem L', desc: '2 beleuchtete Traversentower & Hexagon\n- 4x große Hybrid Movingheads (Eurolite TMH H90)\n- 2x LED Bar\n- 2x LED Fluter/Stroboskop\n- LED-Hexagon bestehend aus 6 LED-Bars' } ], price: '430 €' }
+    const WHATSAPP = "4917651968537";
+    const MAIL = "info@contec-eventtechnik.com";
+    const BETREUUNG = "Technische Betreuung erforderlich";
+
+    // Daten aus dem Mietkatalog 11.26 (gültig November 2026 bis März 2027)
+    // h = relative Höhe auf der Bühne, ar = Seitenverhältnis (Breite / Höhe) des Bildes
+    const SOUND = {
+      ss1: { name: "Soundsystem 1", kurz: "1 akkubetriebener Hauptlautsprecher", preis: 50,
+        punkte: ["Soundboks Gen. 3", "bis zu 126 dB Schalldruck", "bis zu 40 h Akkulaufzeit bei mittlerer Lautstärke", "bis zu 5 h Akkulaufzeit bei voller Lautstärke"],
+        text: "Kompakter, akkubetriebener Lautsprecher – ideal für Locations ganz ohne Stromanschluss.",
+        links: { src: "soundsystem-1.png", ar: 377 / 900, h: 1 } },
+      ss2: { name: "Soundsystem 2", kurz: "1 Hauptlautsprecher + 1 Subwoofer", preis: 80,
+        punkte: ["RCF Art 910A / 912A – professioneller Aktivlautsprecher mit neuster Technik, 130 dB Schalldruck", "the box TA18 – aktiver 18-Zoll-Subwoofer mit 131 dB"],
+        text: "Solide Grundbeschallung mit Subwoofer für spürbaren Bass im kleineren Rahmen.",
+        links: { src: "soundsystem-2.png", ar: 282 / 900, h: 0.97 } },
+      ss25: { name: "Soundsystem 2.5", kurz: "1 Hauptlautsprecher + 1 Subwoofer", preis: 100,
+        punkte: ["RCF Art 910A / 912A – professioneller Aktivlautsprecher mit neuster Technik, 130 dB Schalldruck", "RCF Sub 8003 MK3 – professioneller aktiver 18-Zoll-Subwoofer, 2200 W Leistung, 135 dB Schalldruck"],
+        text: "Mehr Bassdruck als Soundsystem 2 durch leistungsstärkeren Subwoofer – für höheren Anspruch an Klangfülle.",
+        links: { src: "soundsystem-2-5.png", ar: 224 / 795, h: 0.97 } },
+      ss3: { name: "Soundsystem 3", kurz: "2 Hauptlautsprecher + 1 Subwoofer", preis: 140,
+        punkte: ["2x RCF Art 910A / 912A – professioneller Aktivlautsprecher mit neuster Technik, 130 dB Schalldruck", "1x RCF Sub 8003 MK3 – professioneller aktiver 18-Zoll-Subwoofer, 2200 W Leistung, 135 dB Schalldruck"],
+        text: "Zwei Hauptlautsprecher für breitere Schallabdeckung – geeignet bei größeren Räumen oder höheren Lautstärkeanforderungen.",
+        links: { src: "soundsystem-3-links.png", ar: 259 / 900, h: 1 },
+        rechts: { src: "soundsystem-3-rechts.png", ar: 377 / 900, h: 1 } },
+      ss4: { name: "Soundsystem 4", kurz: "2 Hauptlautsprecher + 2 Subwoofer", preis: 180, betreuung: true,
+        punkte: ["2x RCF Art 910A / 912A – professioneller Aktivlautsprecher mit neuster Technik, 130 dB Schalldruck", "2x RCF Sub 8003 MK3 – professioneller aktiver 18-Zoll-Subwoofer, 2200 W Leistung, 135 dB Schalldruck"],
+        text: "Doppelte Subwoofer-Power für maximalen Bass und Reichweite – unser stärkstes Soundsystem.",
+        links: { src: "soundsystem-4-links.png", ar: 264 / 900, h: 1 },
+        rechts: { src: "soundsystem-4-rechts.png", ar: 264 / 900, h: 1 } }
     };
 
-    function setStage(size) {
-      const current = document.querySelector(".stage-image.visible");
-      const next = document.getElementById(sets[size].image);
-      if (current === next) return;
-      current.classList.remove("visible");
-      setTimeout(() => next.classList.add("visible"), 150);
+    const LICHT = {
+      ls1: { name: "Lichtsystem 1", kurz: "Lichtstativ mit 4 LED-Strahlern", preis: 50,
+        punkte: ["4x Ape Labs Maxi V2", "akkubetriebene Scheinwerfer mit hoher Helligkeit"],
+        text: "Kompakte Akku-Grundbeleuchtung, flexibel und ganz ohne Stromanschluss einsetzbar.",
+        bild: { src: "lichtsystem-1.png", ar: 566 / 900, h: 0.9 } },
+      ls2: { name: "Lichtsystem 2", kurz: "2 Lichtstative", preis: 100,
+        punkte: ["2x kleine Movingheads (Purelight MUVY SpotOne)", "2x LED-Bar"],
+        text: "Zwei separate Stative mit beweglichen Effekten, für mehr Raumabdeckung als ein Einzelstativ.",
+        bild: { src: "lichtsystem-2.png", ar: 468 / 900, h: 1.04 } },
+      ls25: { name: "Lichtsystem 2.5", kurz: "2 Lichtstative", preis: 100,
+        punkte: ["2x kleine Movingheads (Purelight MUVY SpotOne)", "6x Ape Labs Maxi V2"],
+        text: "Zwei separate Stative mit beweglichen Effekten, für mehr Raumabdeckung als ein Einzelstativ.",
+        bild: { src: "lichtsystem-2-5.png", ar: 588 / 865, h: 1.02 } },
+      ls3: { name: "Lichtsystem 3", kurz: "1 beleuchteter Traversentower", preis: 120,
+        punkte: ["2x kleine Movingheads (Purelight MUVY SpotOne)", "1x LED-Bar", "1x Strobe/LED-Mehrzweckscheinwerfer"],
+        text: "Erster Traversenaufbau mit bewegtem Licht – für spürbaren Party-Charakter im kleineren Rahmen.",
+        bild: { src: "lichtsystem-3.png", ar: 333 / 900, h: 1.03 } },
+      ls4: { name: "Lichtsystem 4", kurz: "2 Lichtstative", preis: 140,
+        punkte: ["2x große Hybrid Movingheads (Eurolite TMH H90)", "2x LED-Bars"],
+        text: "Zwei separate Aufbaupunkte mit großen Movingheads – für Räume mit höherem Anspruch an Lichtleistung und -reichweite.",
+        bild: { src: "lichtsystem-4.png", ar: 533 / 900, h: 1.02 } },
+      ls45: { name: "Lichtsystem 4.5", kurz: "2 Lichtstative", preis: 140,
+        punkte: ["2x große Hybrid Movingheads (Eurolite TMH H90)", "6x Ape Labs Maxi V2"],
+        text: "Zwei separate Aufbaupunkte mit großen Movingheads – für Räume mit höherem Anspruch an Lichtleistung und -reichweite.",
+        bild: { src: "lichtsystem-4-5.png", ar: 534 / 900, h: 1.02 } },
+      ls5: { name: "Lichtsystem 5", kurz: "1 beleuchteter Traversentower", preis: 160,
+        punkte: ["2x große Hybrid Movingheads (Eurolite TMH H90)", "1x LED-Bar", "1x Strobe/LED-Mehrzweckscheinwerfer"],
+        text: "Wie Lichtsystem 3, jedoch mit stärkeren Movingheads für mehr Lichtleistung und Reichweite.",
+        bild: { src: "lichtsystem-5.png", ar: 348 / 878, h: 1.03 } },
+      ls6: { name: "Lichtsystem 6", kurz: "2 beleuchtete Traversentower", preis: 180,
+        punkte: ["2x große Hybrid Movingheads (Eurolite TMH H90)", "2x LED-Bar", "2x Strobe/LED-Mehrzweckscheinwerfer"],
+        text: "Zwei Traversentower für symmetrische Lichtwirkung und mehr Raumabdeckung, mit höherer Lichtleistung.",
+        bild: { src: "lichtsystem-6.png", ar: 998 / 900, h: 1.0 } },
+      ls7: { name: "Lichtsystem 7", kurz: "2 Lichtstative mit LED-Hexagon", preis: 180, betreuung: true,
+        punkte: ["2x große Hybrid Movingheads (Eurolite TMH H90)", "LED-Hexagon, bestehend aus 6 LED-Tubes"],
+        text: "Zwei große Movingheads auf Stativen mit LED-Hexagon.",
+        bild: { src: "lichtsystem-7.png", ar: 835 / 900, h: 1.0 } },
+      ls8: { name: "Lichtsystem 8", kurz: "2 beleuchtete Traversentower", preis: 220, betreuung: true,
+        punkte: ["4x große Hybrid Movingheads (Eurolite TMH H90)", "2x LED-Bar", "2x Strobe/LED-Mehrzweckscheinwerfer"],
+        text: "Vier große Movingheads auf zwei Traversentowern – kraftvolle Lichteffekte für größere Flächen.",
+        bild: { src: "lichtsystem-8.png", ar: 826 / 900, h: 1.03 } },
+      ls9: { name: "Lichtsystem 9", kurz: "2 Traversentower + LED-Hexagon", preis: 300, betreuung: true,
+        punkte: ["4x große Hybrid Movingheads (Eurolite TMH H90)", "2x LED-Bar", "2x Strobe/LED-Mehrzweckscheinwerfer", "LED-Hexagon, bestehend aus 6 LED-Tubes"],
+        text: "Wie Lichtsystem 8, ergänzt um das LED-Hexagon als zusätzlichen optischen Blickfang.",
+        bild: { src: "lichtsystem-9.png", ar: 1378 / 900, h: 1.03 } }
+    };
 
-      document.getElementById("set-name").textContent = `Set ${size}`;
-      document.getElementById("set-description").textContent = sets[size].description;
-      document.getElementById("set-price").textContent = "Preis: " + sets[size].price;
+    const MIKRO = {
+      slxd: { name: "Shure SLXD24+ / SM58", kurz: "kabelloses Handheld-Mikrofon", max: 2, preise: [0, 50, 80],
+        punkte: ["digitales 1-Kanal UHF Wireless System", "Richtcharakteristik: Niere", "integrierte Shure Digital Feedback Reducer-Software"],
+        bild: "images/extras/shure-slxd24.png" },
+      beta: { name: "Shure Beta 58 A", kurz: "kabelgebundenes Handheld-Mikrofon", max: 4, einzel: 10,
+        punkte: ["dynamisches Gesangsmikrofon", "Richtcharakteristik: Superniere", "höchste Rückkopplungssicherheit bei größtmöglicher Verstärkung"],
+        bild: "images/extras/shure-beta-58a.png" }
+    };
 
-      const featuresList = document.getElementById("set-features");
-      featuresList.innerHTML = "";
-      sets[size].features.forEach(f => {
-        const li = document.createElement("li");
-        li.innerHTML = `<strong>${f.title}</strong><span>${f.desc}</span>`;
-        featuresList.appendChild(li);
+    const TUBES = { name: "LED-Tubes (Ape Labs Neon Tube PIX)", kurz: "LED-Tubes, aufstellbar als Hexagon oder einzeln", preis: 80,
+      punkte: ["Akku-Multipixel-LED-Stableuchte (RGB + WW)", "96 LEDs mit 32 steuerbaren Pixeln", "Schutzart: IP65", "Akkubetrieb: ca. 15 h"],
+      bild: { src: "images/extras/led-tubes.png", ar: 492 / 562, h: 0.5 } };
+
+    const AMBIENTE = { name: "Ambiente-Paket", kurz: "bis zu 18 LED-Strahler (Ape Labs Maxi V2)",
+      stufen: { 0: 0, 6: 60, 12: 110, 18: 160 },
+      punkte: ["hohe Helligkeit und präzise Beleuchtungsmöglichkeiten", "davon 12 Stück akkubetrieben", "Indoor- und Outdoor-Betrieb mit Schutzart IP65"],
+      text: "Geeignet zur Beleuchtung von Flächen, Räumen oder zur Betonung einzelner Elemente.",
+      bild: "images/extras/ape-labs-maxi-v2.png" };
+
+    const KOMPLETT = [
+      { sound: "ss1", licht: "ls1", preis: 100,
+        liste: [
+          { titel: "Soundsystem 1", punkte: ["Soundboks Gen. 3", "akkubetriebener Lautsprecher mit bis zu 126 dB"] },
+          { titel: "Lichtsystem 1", punkte: ["Lichtstativ mit 4 Ape Labs Maxi V2"] }
+        ],
+        hinweise: ["Kompletter Akkubetrieb des Systems möglich, kein Stromanschluss nötig."] },
+      { sound: "ss2", licht: "ls2", preis: 180,
+        liste: [
+          { titel: "Soundsystem 2", kurz: "1 Hauptlautsprecher und 1 Subwoofer", punkte: ["RCF Art 910A / 912A; professioneller Lautsprecher mit bis zu 130 dB", "the box TA18; aktiver 18-Zoll-Subwoofer mit 131 dB"] },
+          { titel: "Lichtsystem 2", punkte: ["2x Lichtstative", "2x kleine Movingheads (Purelight MUVY SpotOne)", "2x LED-Bar"] }
+        ] },
+      { sound: "ss2", licht: "ls3", preis: 200,
+        liste: [
+          { titel: "Soundsystem 2", kurz: "1 Hauptlautsprecher und 1 Subwoofer", punkte: ["RCF Art 910A / 912A; professioneller Lautsprecher mit bis zu 130 dB", "the box TA18; aktiver 18-Zoll-Subwoofer mit 131 dB"] },
+          { titel: "Lichtsystem 3", punkte: ["1x beleuchteter Traversentower", "2x kleine Movingheads (Purelight MUVY SpotOne)", "1x Strobe/LED-Mehrzweckscheinwerfer", "1x LED-Bar"] }
+        ] },
+      { sound: "ss3", licht: "ls4", preis: 280,
+        liste: [
+          { titel: "Soundsystem 3", kurz: "2 Hauptlautsprecher und 1 Subwoofer", punkte: ["2x RCF Art 910A / 912A; professioneller Lautsprecher mit bis zu 130 dB", "1x RCF Sub 8003 MK3, professioneller aktiver 18-Zoll-Subwoofer mit 135 dB"] },
+          { titel: "Lichtsystem 4", punkte: ["2x Lichtstative", "2x große Hybrid Movingheads (Eurolite TMH H90)", "2x LED-Bars"] }
+        ] },
+      { sound: "ss3", licht: "ls6", preis: 320,
+        liste: [
+          { titel: "Soundsystem 3", kurz: "2 Hauptlautsprecher und 1 Subwoofer", punkte: ["2x RCF Art 910A / 912A; professioneller Lautsprecher mit bis zu 130 dB", "1x RCF Sub 8003 MK3, professioneller aktiver 18-Zoll-Subwoofer mit 135 dB"] },
+          { titel: "Lichtsystem 6", punkte: ["2x beleuchtete Traversentower", "2x große Hybrid Movingheads (Eurolite TMH H90)", "2x Strobe/LED-Mehrzweckscheinwerfer", "2x LED-Bars"] }
+        ] },
+      { sound: "ss4", licht: "ls7", lichtName: "Lichtsystem 7 mit 2 LED-Bars", preis: 380, betreuung: true,
+        liste: [
+          { titel: "Soundsystem 4", kurz: "2 Hauptlautsprecher und 2 Subwoofer", punkte: ["2x RCF Art 910A / 912A; professioneller Lautsprecher mit bis zu 130 dB", "2x RCF Sub 8003 MK3, professioneller aktiver 18-Zoll-Subwoofer mit 135 dB"] },
+          { titel: "Lichtsystem 7 mit 2 LED-Bars", punkte: ["2x Lichtstative", "2x große Hybrid Movingheads (Eurolite TMH H90)", "2x LED-Bars", "1x LED-Hexagon, bestehend aus 6 LED-Tubes"] }
+        ],
+        hinweise: ["Dieser Lichtaufbau nutzt die Lautsprecherstative als Halterung und ist ausschließlich in Kombination mit Soundsystem 3 oder 4 verfügbar."] },
+      { sound: "ss4", licht: "ls9", preis: 480, betreuung: true,
+        liste: [
+          { titel: "Soundsystem 4", kurz: "2 Hauptlautsprecher und 2 Subwoofer", punkte: ["2x RCF Art 910A / 912A; professioneller Lautsprecher mit bis zu 130 dB", "2x RCF Sub 8003 MK3, professioneller aktiver 18-Zoll-Subwoofer mit 135 dB"] },
+          { titel: "Lichtsystem 9", punkte: ["2x beleuchtete Traversentower", "4x große Hybrid Movingheads (Eurolite TMH H90)", "2x Strobe/LED-Mehrzweckscheinwerfer", "2x LED-Bars", "1x LED-Hexagon, bestehend aus 6 LED-Tubes"] }
+        ] }
+    ];
+
+    const state = {
+      mode: "pakete",
+      paket: 0,
+      sound: null,
+      licht: null,
+      slxd: 0,
+      beta: 0,
+      tubes: false,
+      ambiente: 0
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const euro = (n) => n.toLocaleString("de-DE") + " €";
+
+    const ICON_INFO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>';
+    const ICON_WARN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 2 21h20L12 3z"/><path d="M12 10v5M12 18h.01"/></svg>';
+
+    function el(tag, attrs = {}, html = "") {
+      const e = document.createElement(tag);
+      for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+      if (html) e.innerHTML = html;
+      return e;
+    }
+
+    function hint(text, warn) {
+      return `<p class="hint${warn ? " warn" : ""}">${warn ? ICON_WARN : ICON_INFO}<span>${text}</span></p>`;
+    }
+
+    /* ---------- Komplettpakete ---------- */
+
+    function buildPaketeLayer() {
+      const layer = $("layer-pakete");
+      const buttons = $("kp-buttons");
+      KOMPLETT.forEach((kp, i) => {
+        const img = el("img", { class: "kp-image", alt: `Komplettpaket ${i + 1}`, "data-src": `images/pakete/komplettpaket-${i + 1}.png` });
+        layer.appendChild(img);
+        const b = el("button", { type: "button", "aria-pressed": "false", "aria-label": `Komplettpaket ${i + 1}, ${kp.preis} Euro` },
+          `<b>${i + 1}</b><small>${euro(kp.preis)}</small>`);
+        b.addEventListener("click", () => showPaket(i));
+        buttons.appendChild(b);
       });
-
-      document.querySelectorAll('.controls button').forEach(btn => btn.classList.remove('active'));
-      document.querySelector(`button[data-set="${size}"]`).classList.add('active');
     }
 
-    const tooltip = document.getElementById('tooltip');
-
-    function showTooltip() {
-      tooltip.classList.add('show');
+    function loadImg(img) {
+      if (!img.src && img.dataset.src) img.src = img.dataset.src;
     }
 
-    function hideTooltip() {
-      setTimeout(() => {
-        if (!tooltip.matches(':hover') && !document.querySelector('.info-btn-wrapper:hover')) {
-          tooltip.classList.remove('show');
+    function showPaket(i) {
+      state.paket = i;
+      const kp = KOMPLETT[i];
+      const imgs = document.querySelectorAll(".kp-image");
+      imgs.forEach((img, j) => {
+        if (j === i) {
+          loadImg(img);
+          if (img.complete) setTimeout(() => img.classList.add("visible"), 120);
+          else img.onload = () => img.classList.add("visible");
+        } else {
+          img.classList.remove("visible");
         }
-      }, 50);
+      });
+      // Nachbarn vorladen, damit das Umschalten flüssig ist
+      [i - 1, i + 1].forEach((j) => imgs[j] && loadImg(imgs[j]));
+
+      document.querySelectorAll("#kp-buttons button").forEach((b, j) => b.setAttribute("aria-pressed", j === i ? "true" : "false"));
+
+      $("kp-name").textContent = `Komplettpaket ${i + 1}`;
+      $("kp-subtitle").textContent = `${SOUND[kp.sound].name} + ${kp.lichtName || LICHT[kp.licht].name}`;
+      $("kp-features").innerHTML = kp.liste.map((g) =>
+        `<li><strong>${g.titel}</strong>${g.kurz ? `<span class="kurz">${g.kurz}</span>` : ""}<ul>${g.punkte.map((p) => `<li>${p}</li>`).join("")}</ul></li>`
+      ).join("");
+      let hints = (kp.hinweise || []).map((h) => hint(h)).join("");
+      if (kp.betreuung) hints += hint(BETREUUNG + ".", true);
+      $("kp-hints").innerHTML = hints;
+      updateFoot();
     }
 
-    function openPDF() {
-      window.open('images/Mietkatalog_ConTec_Eventtechnik.pdf', '_blank');
+    /* ---------- Eigenes Paket ---------- */
+
+    function optionButton(key, item, group) {
+      const b = el("button", { type: "button", class: "option", "aria-pressed": "false", "data-key": key });
+      b.innerHTML =
+        `<span class="o-name">${item.name}${item.betreuung ? '<span class="o-badge">Betreuung</span>' : ""}</span>` +
+        `<span class="o-price">${item.preis !== undefined ? euro(item.preis) : ""}</span>` +
+        `<span class="o-kurz">${item.kurz}</span>` +
+        (item.punkte ? `<span class="option-detail"><ul>${item.punkte.map((p) => `<li>${p}</li>`).join("")}</ul>${item.text ? `<p>${item.text}</p>` : ""}${item.betreuung ? `<p style="color:var(--warn);font-style:normal">${BETREUUNG}</p>` : ""}</span>` : "");
+      b.addEventListener("click", () => {
+        state[group] = state[group] === key ? null : key;
+        render();
+      });
+      return b;
     }
+
+    function noneButton(group, label) {
+      const b = el("button", { type: "button", class: "option", "aria-pressed": "false", "data-key": "" },
+        `<span class="o-name">${label}</span><span class="o-price"></span>`);
+      b.addEventListener("click", () => { state[group] = null; render(); });
+      return b;
+    }
+
+    function counterRow(key, item) {
+      const row = el("div", { class: "counter-row", "data-key": key });
+      row.innerHTML =
+        `<span class="o-name">${item.name}</span>` +
+        `<span class="counter"><button type="button" aria-label="Weniger">−</button><output>0</output><button type="button" aria-label="Mehr">+</button></span>` +
+        `<span class="o-kurz"></span>`;
+      const [minus, plus] = row.querySelectorAll("button");
+      minus.addEventListener("click", () => { state[key] = Math.max(0, state[key] - 1); render(); });
+      plus.addEventListener("click", () => { state[key] = Math.min(item.max, state[key] + 1); render(); });
+      return row;
+    }
+
+    function micPrice(key, n) {
+      const m = MIKRO[key];
+      return m.preise ? m.preise[n] : n * m.einzel;
+    }
+
+    function buildBuilder() {
+      const os = $("opt-sound");
+      os.appendChild(noneButton("sound", "Kein Soundsystem"));
+      for (const [k, v] of Object.entries(SOUND)) os.appendChild(optionButton(k, v, "sound"));
+
+      const ol = $("opt-licht");
+      ol.appendChild(noneButton("licht", "Kein Lichtsystem"));
+      for (const [k, v] of Object.entries(LICHT)) ol.appendChild(optionButton(k, v, "licht"));
+
+      const om = $("opt-mikro");
+      for (const k of Object.keys(MIKRO)) om.appendChild(counterRow(k, MIKRO[k]));
+
+      const oe = $("opt-extras");
+      const tb = el("button", { type: "button", class: "option", "aria-pressed": "false", id: "opt-tubes" });
+      tb.innerHTML = `<span class="o-name">${TUBES.name}</span><span class="o-price">${euro(TUBES.preis)}</span><span class="o-kurz">${TUBES.kurz}</span>` +
+        `<span class="option-detail"><ul>${TUBES.punkte.map((p) => `<li>${p}</li>`).join("")}</ul></span>`;
+      tb.addEventListener("click", () => { state.tubes = !state.tubes; render(); });
+      oe.appendChild(tb);
+
+      const amb = el("div", { class: "counter-row", id: "opt-ambiente" });
+      amb.innerHTML = `<span class="o-name">${AMBIENTE.name}</span><span class="o-price" style="grid-row:1;grid-column:2;color:var(--accent);font-weight:700;font-size:1.15rem"></span>` +
+        `<span class="o-kurz" style="grid-column:1/-1">${AMBIENTE.kurz}. ${AMBIENTE.text}</span><div class="segmented" role="group" aria-label="Anzahl LED-Strahler"></div>`;
+      const seg = amb.querySelector(".segmented");
+      for (const n of [0, 6, 12, 18]) {
+        const b = el("button", { type: "button", "aria-pressed": "false", "data-n": n },
+          n === 0 ? "Keins<small>&nbsp;</small>" : `${n}er<small>${euro(AMBIENTE.stufen[n])}</small>`);
+        b.addEventListener("click", () => { state.ambiente = n; render(); });
+        seg.appendChild(b);
+      }
+      oe.appendChild(amb);
+    }
+
+    function selection() {
+      const items = [];
+      if (state.sound) items.push({ name: SOUND[state.sound].name, preis: SOUND[state.sound].preis });
+      if (state.licht) items.push({ name: LICHT[state.licht].name, preis: LICHT[state.licht].preis });
+      if (state.slxd) items.push({ name: `${state.slxd}x ${MIKRO.slxd.name}`, preis: micPrice("slxd", state.slxd) });
+      if (state.beta) items.push({ name: `${state.beta}x ${MIKRO.beta.name}`, preis: micPrice("beta", state.beta) });
+      if (state.tubes) items.push({ name: "LED-Tubes (Ape Labs Neon Tube PIX)", preis: TUBES.preis });
+      if (state.ambiente) items.push({ name: `Ambiente-Paket (${state.ambiente} LED-Strahler)`, preis: AMBIENTE.stufen[state.ambiente] });
+      return items;
+    }
+
+    function needsBetreuung() {
+      return (state.sound && SOUND[state.sound].betreuung) || (state.licht && LICHT[state.licht].betreuung);
+    }
+
+    // Entspricht die Auswahl einem Komplettpaket?
+    function matchingPaket() {
+      const extras = state.slxd || state.beta || state.tubes || state.ambiente;
+      if (extras) return -1;
+      return KOMPLETT.findIndex((kp) => kp.sound === state.sound && kp.licht === state.licht && !kp.lichtName);
+    }
+
+    function renderBuilderPanel() {
+      document.querySelectorAll("#opt-sound .option").forEach((b) => b.setAttribute("aria-pressed", (b.dataset.key || null) === state.sound ? "true" : "false"));
+      document.querySelectorAll("#opt-licht .option").forEach((b) => b.setAttribute("aria-pressed", (b.dataset.key || null) === state.licht ? "true" : "false"));
+
+      for (const k of Object.keys(MIKRO)) {
+        const row = document.querySelector(`.counter-row[data-key="${k}"]`);
+        const n = state[k];
+        row.querySelector("output").textContent = n;
+        const [minus, plus] = row.querySelectorAll("button");
+        minus.disabled = n === 0;
+        plus.disabled = n >= MIKRO[k].max;
+        row.classList.toggle("active", n > 0);
+        const m = MIKRO[k];
+        const preisText = m.preise ? `${euro(m.preise[1])} (1 Mikrofon) · ${euro(m.preise[2])} (2 Mikrofone)` : `${euro(m.einzel)} pro Mikrofon`;
+        row.querySelector(".o-kurz").textContent = `${m.kurz} · ${preisText}`;
+      }
+
+      $("opt-tubes").setAttribute("aria-pressed", state.tubes ? "true" : "false");
+      const amb = $("opt-ambiente");
+      amb.classList.toggle("active", state.ambiente > 0);
+      amb.querySelector(".o-price").textContent = state.ambiente ? euro(AMBIENTE.stufen[state.ambiente]) : "";
+      amb.querySelectorAll(".segmented button").forEach((b) => b.setAttribute("aria-pressed", +b.dataset.n === state.ambiente ? "true" : "false"));
+    }
+
+    /* ---------- Bühne (eigenes Paket) ---------- */
+
+    const pieces = {};
+
+    function piece(slot, cls = "piece") {
+      if (!pieces[slot]) {
+        pieces[slot] = el("img", { class: cls, alt: "" });
+        $("layer-eigenes").appendChild(pieces[slot]);
+      }
+      return pieces[slot];
+    }
+
+    function setPiece(img, src, alt) {
+      if (!src) {
+        img.classList.remove("visible");
+        img.dataset.want = "";
+        return;
+      }
+      if (img.dataset.want === src) { img.classList.add("visible"); return; }
+      img.dataset.want = src;
+      img.classList.remove("visible");
+      setTimeout(() => {
+        if (img.dataset.want !== src) return;
+        img.onload = () => { if (img.dataset.want === src) img.classList.add("visible"); };
+        img.alt = alt;
+        img.src = src;
+        if (img.complete && img.naturalWidth) img.classList.add("visible");
+      }, img.getAttribute("src") ? 180 : 0);
+    }
+
+    function layoutStage() {
+      const stage = $("stage");
+      const W = stage.clientWidth, H = stage.clientHeight;
+      if (!W || !H) return;
+
+      const s = state.sound ? SOUND[state.sound] : null;
+      const l = state.licht ? LICHT[state.licht] : null;
+
+      // Reihenfolge von links nach rechts: Lautsprecher, Licht, Tubes, Lautsprecher
+      const row = [];
+      if (s) row.push({ ...s.links, slot: "soundL", src: "images/systeme/" + s.links.src, alt: s.name });
+      if (l) row.push({ ...l.bild, slot: "licht", src: "images/systeme/" + l.bild.src, alt: l.name });
+      if (state.tubes) row.push({ ...TUBES.bild, slot: "tubes", alt: "LED-Tubes" });
+      if (s && s.rechts) row.push({ ...s.rechts, slot: "soundR", src: "images/systeme/" + s.rechts.src, alt: s.name });
+
+      let base = H * 0.8;
+      const gap = () => base * 0.07;
+      const total = () => row.reduce((sum, p) => sum + base * p.h * p.ar, 0) + gap() * Math.max(0, row.length - 1);
+      const maxW = W * 0.94;
+      if (total() > maxW) base *= maxW / total();
+
+      let x = (W - total()) / 2;
+      const used = new Set();
+      for (const p of row) {
+        const img = piece(p.slot);
+        const h = base * p.h;
+        img.style.height = h + "px";
+        img.style.left = x + "px";
+        setPiece(img, p.src, p.alt);
+        used.add(p.slot);
+        x += h * p.ar + gap();
+      }
+      for (const slot of ["soundL", "licht", "tubes", "soundR"]) {
+        if (!used.has(slot) && pieces[slot]) setPiece(pieces[slot], null);
+      }
+
+      // Ambiente: Strahler am Bühnenboden
+      const n = state.ambiente ? Math.min(state.ambiente, 6) : 0;
+      const spotW = Math.min(W * 0.05, H * 0.075);
+      for (let i = 0; i < 6; i++) {
+        const sp = piece("spot" + i, "spot");
+        sp.style.width = spotW + "px";
+        if (i < n) {
+          sp.style.left = (W * (i + 0.5) / n - spotW / 2) + "px";
+          setPiece(sp, AMBIENTE.bild, "LED-Strahler");
+        } else {
+          setPiece(sp, null);
+        }
+      }
+
+      $("stage-empty").hidden = row.length > 0 || n > 0 || state.slxd > 0 || state.beta > 0;
+    }
+
+    function renderTray() {
+      const items = [];
+      if (state.slxd) items.push({ img: MIKRO.slxd.bild, text: `${state.slxd}x Funkmikrofon` });
+      if (state.beta) items.push({ img: MIKRO.beta.bild, text: `${state.beta}x Kabelmikrofon` });
+      if (state.ambiente) items.push({ img: AMBIENTE.bild, text: `${state.ambiente} LED-Strahler` });
+      $("tray").innerHTML = items.map((t) => `<div class="tray-item"><img src="${t.img}" alt="">${t.text}</div>`).join("");
+
+      const m = matchingPaket();
+      const badge = $("match-badge");
+      if (m >= 0) badge.textContent = `Entspricht Komplettpaket ${m + 1}`;
+      badge.hidden = m < 0;
+    }
+
+    /* ---------- Fußbereich: Preis und Anfrage ---------- */
+
+    function anfrageText() {
+      const zeilen = ["Hallo ConTec-Team,", ""];
+      let summe;
+      if (state.mode === "pakete") {
+        const kp = KOMPLETT[state.paket];
+        summe = kp.preis;
+        zeilen.push(`ich interessiere mich für Komplettpaket ${state.paket + 1} (${SOUND[kp.sound].name} + ${kp.lichtName || LICHT[kp.licht].name}), Mietpreis ${euro(summe)} pro Tag.`);
+      } else {
+        const sel = selection();
+        summe = sel.reduce((a, b) => a + b.preis, 0);
+        zeilen.push("ich habe mir im Paket-Konfigurator ein eigenes Paket zusammengestellt:");
+        sel.forEach((s) => zeilen.push(`- ${s.name} (${euro(s.preis)})`));
+        zeilen.push("", `Summe: ${euro(summe)} pro Tag (unverbindlich)`);
+      }
+      zeilen.push("", "Datum:", "Location / Ort:", "Anzahl Gäste:", "", "Viele Grüße");
+      return zeilen.join("\n");
+    }
+
+    function updateFoot() {
+      let summe, summary = "";
+      if (state.mode === "pakete") {
+        summe = KOMPLETT[state.paket].preis;
+      } else {
+        const sel = selection();
+        summe = sel.reduce((a, b) => a + b.preis, 0);
+        summary = sel.length
+          ? `<ul class="summary-list">${sel.map((s) => `<li><span>${s.name}</span><span>${euro(s.preis)}</span></li>`).join("")}</ul>`
+          : `<p class="summary-empty">Noch nichts ausgewählt.</p>`;
+        if (needsBetreuung()) summary += hint(BETREUUNG + " (wird gesondert berechnet).", true);
+        if (state.sound === "ss4" && state.licht === "ls7" && !(state.slxd || state.beta || state.tubes || state.ambiente)) {
+          summary += hint("Tipp: Als Komplettpaket 6 bekommst du zusätzlich 2 LED-Bars an den Lautsprecherstativen für 380 €.");
+        }
+      }
+      $("foot-summary").innerHTML = summary;
+      $("price").innerHTML = `${euro(summe)} <small>/ Tag</small>`;
+
+      const leer = state.mode === "eigenes" && summe === 0;
+      const text = anfrageText();
+      const wa = $("btn-whatsapp"), mail = $("btn-mail");
+      wa.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
+      const betreff = state.mode === "pakete" ? `Anfrage Komplettpaket ${state.paket + 1}` : "Anfrage eigenes Paket";
+      mail.href = `mailto:${MAIL}?subject=${encodeURIComponent(betreff)}&body=${encodeURIComponent(text)}`;
+      [wa, mail].forEach((a) => {
+        a.style.pointerEvents = leer ? "none" : "";
+        a.style.opacity = leer ? "0.4" : "";
+        a.setAttribute("aria-disabled", leer ? "true" : "false");
+      });
+      $("btn-anpassen").hidden = state.mode !== "pakete";
+    }
+
+    /* ---------- Ansicht wechseln ---------- */
+
+    function setMode(mode) {
+      state.mode = mode;
+      document.body.dataset.mode = mode;
+      const pakete = mode === "pakete";
+      document.querySelectorAll(".mode-switch button").forEach((b) => b.setAttribute("aria-selected", b.dataset.mode === mode ? "true" : "false"));
+      $("panel-pakete").hidden = !pakete;
+      $("panel-eigenes").hidden = pakete;
+      $("layer-pakete").hidden = !pakete;
+      $("layer-eigenes").hidden = pakete;
+      $("kp-buttons").hidden = !pakete;
+      $("builder-help").hidden = pakete;
+      if (pakete) showPaket(state.paket);
+      render();
+    }
+
+    function render() {
+      if (state.mode === "eigenes") {
+        renderBuilderPanel();
+        layoutStage();
+        renderTray();
+      }
+      updateFoot();
+    }
+
+    document.querySelectorAll(".mode-switch button").forEach((b) => b.addEventListener("click", () => setMode(b.dataset.mode)));
+
+    $("btn-anpassen").addEventListener("click", () => {
+      const kp = KOMPLETT[state.paket];
+      Object.assign(state, { sound: kp.sound, licht: kp.licht, slxd: 0, beta: 0, tubes: false, ambiente: 0 });
+      setMode("eigenes");
+      $("panel-eigenes").scrollTop = 0;
+    });
+
+    /* ---------- Design A/B (nur Testversion) ---------- */
+
+    function setDesign(d) {
+      document.documentElement.dataset.design = d;
+      document.querySelectorAll("#design-switch button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.design === d ? "true" : "false"));
+      try { localStorage.setItem("contec-design", d); } catch (e) {}
+    }
+
+    document.querySelectorAll("#design-switch button").forEach((b) => b.addEventListener("click", () => setDesign(b.dataset.design)));
+
+    const params = new URLSearchParams(location.search);
+    let startDesign = params.get("design");
+    if (!startDesign) { try { startDesign = localStorage.getItem("contec-design"); } catch (e) {} }
+    setDesign(startDesign === "b" ? "b" : "a");
+
+    buildPaketeLayer();
+    buildBuilder();
+    window.addEventListener("resize", () => state.mode === "eigenes" && layoutStage());
+    if ("ResizeObserver" in window) new ResizeObserver(() => state.mode === "eigenes" && layoutStage()).observe($("stage"));
+
+    // Startansicht, z. B. ?ansicht=eigenes&sound=ss3&licht=ls6 (praktisch für Screenshots)
+    const p = Number(params.get("paket"));
+    if (p >= 1 && p <= KOMPLETT.length) state.paket = p - 1;
+    if (SOUND[params.get("sound")]) state.sound = params.get("sound");
+    if (LICHT[params.get("licht")]) state.licht = params.get("licht");
+    for (const k of ["slxd", "beta", "ambiente"]) if (params.get(k)) state[k] = Number(params.get(k)) || 0;
+    if (params.get("tubes") === "1") state.tubes = true;
+    setMode(params.get("ansicht") === "eigenes" ? "eigenes" : "pakete");
   </script>
 </body>
 </html>
-
